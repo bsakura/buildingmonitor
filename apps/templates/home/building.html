@@ -1,0 +1,286 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Building {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+  <div class="min-height-300 bg-primary position-absolute w-100"></div>
+    
+  {% include "includes/sidenav.html" %}
+
+  <main class="main-content position-relative border-radius-lg ">
+
+    {% include "includes/navigation.html" %}
+
+    <div class="container-fluid py-4">
+
+      <div class="row">
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+          <div class="card">
+            <div class="card-body p-3">
+              <div class="row">
+                <div class="col-8">
+                  <div class="numbers">
+                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Platinum</p>
+                    <h5 class="font-weight-bolder">
+                      5
+                    </h5>
+                    <p class="mb-0">
+                      >80 points
+                   </p>
+                  </div>
+                </div>
+                <div class="col-4 text-end">
+                  <div class="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle">
+                    <i class="ni ni-money-coins text-lg opacity-10" aria-hidden="true"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+          <div class="card">
+            <div class="card-body p-3">
+              <div class="row">
+                <div class="col-8">
+                  <div class="numbers">
+                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Gold</p>
+                    <h5 class="font-weight-bolder">
+                      6
+                    </h5>
+                    <p class="mb-0">
+                      60 - 79 points
+                   </p>
+                  </div>
+                </div>
+                <div class="col-4 text-end">
+                  <div class="icon icon-shape bg-gradient-danger shadow-danger text-center rounded-circle">
+                    <i class="ni ni-world text-lg opacity-10" aria-hidden="true"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+          <div class="card">
+            <div class="card-body p-3">
+              <div class="row">
+                <div class="col-8">
+                  <div class="numbers">
+                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Silver</p>
+                    <h5 class="font-weight-bolder">
+                      14
+                    </h5>
+                    <p class="mb-0">
+                      50 - 59 points
+                   </p>
+                  </div>
+                </div>
+                <div class="col-4 text-end">
+                  <div class="icon icon-shape bg-gradient-success shadow-success text-center rounded-circle">
+                    <i class="ni ni-paper-diploma text-lg opacity-10" aria-hidden="true"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-sm-6">
+          <div class="card">
+            <div class="card-body p-3">
+              <div class="row">
+                <div class="col-8">
+                  <div class="numbers">
+                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Certified</p>
+                    <h5 class="font-weight-bolder">
+                      3
+                    </h5>
+                    <p class="mb-0">
+                       40 - 49 points
+                    </p>
+                  </div>
+                </div>
+                <div class="col-4 text-end">
+                  <div class="icon icon-shape bg-gradient-warning shadow-warning text-center rounded-circle">
+                    <i class="ni ni-cart text-lg opacity-10" aria-hidden="true"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-4">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <select class="form-control" id="zone-filter">
+                  <option value="">All</option>
+                  <option value="1">Zone 1</option>
+                  <option value="2">Zone 2</option>
+                  <option value="3">Zone 3</option>
+                  <option value="4">Zone 4</option>
+                  <option value="5">Zone 5</option>
+                  <option value="6">Zone 6</option>
+
+                </select>
+              </div>
+              
+            </div>
+          </div>
+          <div class="row" id="cardContainer">
+            <!-- Cards will be dynamically generated here -->
+          </div>
+        </div>
+        
+        
+    </div>
+
+
+        <!-- Add a container for the cards -->
+        <div class="card-container row mt-4" id="card-container"></div>
+
+      </div>
+
+
+
+      {% include "includes/footer.html" %}
+
+    </div>
+  
+  </main>  
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+
+  
+  <script src="{{ config.ASSETS_ROOT }}/js/plugins/chartjs.min.js"></script>
+ 
+
+<script>
+  const cardData = [
+  { zone: '1', building: 'CRCS', title: 'CRCS', rank: 'Platinum', emission: 220, electricity: 100, water: 89, image: 'crcs.jpeg' }, 
+  { zone: '1', building: 'CAS', title: 'CAS', rank: 'Platinum', emission: 220, electricity: 100, water: 89, image: 'cas.jpeg' }, 
+  { zone: '4', building:'Energi', title: 'Energi', rank: 'Platinum', emission: 220, electricity: 100, water: 89, image: 'energi.jpeg' },  
+  { zone: '4', building: 'Kimia', title: 'Kimia', rank: 'Platinum', emission: 220, electricity: 100, water: 89, image: 'kimia.jpeg' },  
+  { zone: '3', building: 'PP', title: 'PP', rank: 'Platinum', emission: 220, electricity: 100, water: 89, image: 'pp.jpeg' },  
+  { zone: '1', building:'PAU', title: 'PAU', rank: 'Platinum', emission: 220, electricity: 100, water: 89, image: 'pau.jpeg' },  
+  { zone: '1', building: 'CADL', title: 'CADL', rank: 'Platinum', emission: 220, electricity: 100, water: 89, image: 'cadl.jpeg' },  
+  { zone: '1', building: 'TI', title: 'Teknik Industri', rank: 'Platinum', emission: 220, electricity: 100, water: 89, image: 'ti.png' }, 
+  { zone: '3', building: 'Mesin', title: 'Mesin', rank: 'Platinum', emission: 220, electricity: 100, water: 89, image: 'mesin.jpeg' },  
+  { zone: '2', building: 'LabtekX', title: 'Labtek X', rank: 'Platinum', emission: 220, electricity: 100, water: 89, image: 'labtekx.jpeg' },  
+  { zone: '2', building: 'LabtekXI', title: 'Labtek XI', rank: 'Platinum', emission: 220, electricity: 100, water: 89, image: 'labtekxi.jpeg' },  
+  { zone: '4', building: 'TPB', title: 'TPB', rank: 'Platinum', emission: 220, electricity: 100, water: 89, image: 'tpb.jpeg' },  
+  { zone: '1', building: 'CampusCenter', title: 'Campus Center', rank: 'Platinum', emission: 220, electricity: 100, water: 89, image: 'campuscenter.jpeg' },
+  { zone: '6', building: 'AulaBarat', title: 'Aula Barat', rank: 'Gold', emission: 180, electricity: 80, water: 72, image: 'aulabarat.jpeg' },
+  { zone: '6', building: 'AulaTimur', title: 'Aula Timur', rank: 'Gold', emission: 180, electricity: 80, water: 72, image: 'aulatimur.jpeg' },
+  { zone: '6', building: 'CIBE', title: 'CIBE', rank: 'Gold', emission: 180, electricity: 80, water: 72, image: 'cibe.jpeg' },
+  { zone: '4', building: 'Konversi', title: 'Konversi', rank: 'Gold', emission: 180, electricity: 80, water: 72, image: 'konversi.jpeg' },
+  { zone: '6', building: 'Fisi', title: 'Fisika', rank: 'Gold', emission: 180, electricity: 80, water: 72, image: 'fisika.jpeg' },  
+  { zone: '5', building: 'LabtekIXBC', title: 'Labtek IXBC', rank: 'Gold', emission: 180, electricity: 80, water: 72, image: 'labtekixbc.jpeg' },
+  { zone: '4', building: 'STT', title: 'STT', rank: 'Gold', emission: 180, electricity: 80, water: 72, image: 'stt.jpeg' },
+  { zone: '6', building: 'TL', title: 'Teknik Lingkungan', rank: 'Platinum', emission: 220, electricity: 100, water: 89, image: 'tl.jpeg' },  
+  { zone: '5', building: 'LabtekV', title: 'Labtek V', rank: 'Platinum', emission: 220, electricity: 100, water: 89, image: 'labtekv.jpeg' },  
+  { zone: '5', building: 'LabtekVI', title: 'Labtek VI', rank: 'Platinum', emission: 220, electricity: 100, water: 89, image: 'labtekvi.jpeg' },  
+  { zone: '5', building: 'LabtekVII', title: 'Labtek VII', rank: 'Platinum', emission: 220, electricity: 100, water: 89, image: 'labtekvii.jpeg' },  
+  { zone: '5', building: 'LabtekVIII', title: 'Labtek VIII', rank: 'Platinum', emission: 220, electricity: 100, water: 89, image: 'labtekviii.jpeg' },  
+  { zone: '6', building: 'Sabuga', title: 'Sabuga', rank: 'Platinum', emission: 220, electricity: 100, water: 89, image: 'sabuga.jpeg' }
+
+  ];
+
+  const buildingValues = ['CRCS', 'CAS', 'Energi', 'Kimia', 'PP', 'PAU', 'CADL', 'TI', 'Mesin', 'LabtekX', 'LabtekXI', 'TPB', 'CampusCenter', 'AulaBarat', 'AulaTimur', 'CIBE', 'Konversi', 'Fisi', 'LabtekIXBC', 'STT', 'TL', 'LabtekV', 'LabtekVI', 'LabtekVII', 'LabtekVIII', 'Sabuga'];
+  const fetchRequests = buildingValues.map(buildingValue => fetch(`/building-data/${buildingValue}`).then(response => response.json()));
+  Promise.all(fetchRequests)
+  .then(dataArray => {
+    dataArray.forEach((data, index) => {
+      const buildingValue = buildingValues[index];
+      const latestElectricity = data.actual_kwh.slice(-1)[0][buildingValue];
+      const latestWater = data.actual_liter.slice(-1)[0][buildingValue];
+      const latestCF = data.actual_cf.slice(-1)[0][buildingValue];
+
+      cardData[index].electricity = latestElectricity;
+      cardData[index].water = latestWater;
+      cardData[index].emission = latestCF;
+    });
+
+    generateCards();
+  })
+  .catch(error => {
+    console.error(error);
+  });
+
+  function generateCards(selectedZone) {
+    const cardContainer = document.getElementById('cardContainer');
+    cardContainer.innerHTML = '';
+    const filteredCards = selectedZone ? cardData.filter(card => card.zone === selectedZone) : cardData;
+    filteredCards.forEach(card => {
+      const cardHtml = `
+      <div class="col-md-6 mt-4">
+        <div class="card card-profile">
+          <img src="{{ config.ASSETS_ROOT }}/img/itb/${card.image}" alt="Image placeholder" class="card-img-top" style="object-fit: cover; height: 200px;">
+          <div class="row justify-content-center">
+            <div class="col-4 col-lg-4 order-lg-2">
+            </div>
+          </div>
+          <div class="text-center mt-4">
+            <h5>${card.title}</h5>
+            <div class="h6 font-weight-300">
+              <i class="ni location_pin mr-2"></i>${card.rank}
+            </div>
+            <div class="h6 mt-2">
+              <i class="ni business_briefcase-24 mr-2"></i>Zone ${card.zone}
+            </div>
+          </div>
+          <div class="card-body pt-0">
+            <div class="row">
+              <div class="col">
+                <div class="d-flex justify-content-center">
+                  <div class="d-grid text-center">
+                    <span class="text-lg font-weight-bolder">${card.emission}</span>
+                    <span class="text-sm opacity-8">CO2e</span>
+                  </div>
+                  <div class="d-grid text-center mx-4">
+                    <span class="text-lg font-weight-bolder">${card.electricity}</span>
+                    <span class="text-sm opacity-8">KwH</span>
+                  </div>
+                  <div class="d-grid text-center">
+                    <span class="text-lg font-weight-bolder">${card.water}</span>
+                    <span class="text-sm opacity-8">ltr</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="text-center mt-4">
+              <a href="building-data.html?building=${card.building}" class="btn btn-primary">View Data</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      `;
+      cardContainer.insertAdjacentHTML('beforeend', cardHtml);
+    });
+  }
+
+  const electricityFilter = document.getElementById('zone-filter');
+  electricityFilter.addEventListener('change', (event) => {
+    const selectedZone = event.target.value;
+    generateCards(selectedZone);
+  });
+
+  generateCards(); // Call the function initially to show all cards
+
+
+</script>
+
+
+
+{% endblock javascripts %}

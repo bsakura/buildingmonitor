@@ -1,0 +1,235 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Profile {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+  <div class="position-absolute w-100 min-height-300 top-0" 
+       style="background-image: url('{{ config.ASSETS_ROOT }}/img/profile-layout-header.jpg'); background-position-y: 50%;">
+    <span class="mask bg-primary opacity-6"></span>
+  </div>
+      
+  {% include "includes/sidenav.html" %}
+
+  <main class="main-content position-relative border-radius-lg ">
+
+    {% include "includes/navigation.html" %}
+
+    <div class="card mx-4 mt-4">
+      <div class="card-body p-3">
+        <div class="card-header pb-0">
+          <div class="d-flex align-items-center">
+            <p class="mb-0 text-lg">Leeds Assassment</p>     
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="text-uppercase text-m">Location and Transportation</p>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="example-text-input" class="form-control-label text-sm">Does the building have a transportation management plan that encourages sustainable transportation options?</label> 
+                <div class="text-s p-3">
+                  <input type="radio" name="alternative_transportation" value="yes"> <span>Yes</span> <br>
+                  <input type="radio" name="alternative_transportation" value="no"> <span>No</span>
+                </div>
+              </div>
+            </div>       
+          </div>
+          <p class="text-uppercase text-m">Sustainable Sites</p>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="example-text-input" class="form-control-label text-sm">Does this building have a policy for protecting the site sustainably?</label> 
+                <div class="text-s p-3">
+                  <input type="radio" name="site_protect" value="yes"> <span>Yes</span> <br>
+                  <input type="radio" name="site_protect" value="no"> <span>No</span>
+                </div>
+              </div>
+            </div>       
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="example-text-input" class="form-control-label text-sm">Does the building reduce outdoor water use through efficient irrigation and landscaping practices? </label> 
+                <div class="text-s p-3">
+                  <input type="radio" name="rain_management" value="yes"> <span>Yes</span> <br>
+                  <input type="radio" name="rain_management" value="no"> <span>No</span>
+                </div>
+              </div>
+            </div>       
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="example-text-input" class="form-control-label text-sm">Does the building implement measures to reduce the urban heat island effect, such as green roofs or cool pavements?</label> 
+                <div class="text-s p-3">
+                  <input type="radio" name="heat_island_reduction" value="yes"> <span>Yes</span> <br>
+                  <input type="radio" name="heat_island_reduction" value="no"> <span>No</span>
+                </div>
+              </div>
+            </div>       
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="example-text-input" class="form-control-label text-sm">Does the building reduce light pollution by using dark sky compliant outdoor lighting fixtures?</label> 
+                <div class="text-s p-3">
+                  <input type="radio" name="light_pollution_reduction" value="yes"> <span>Yes</span> <br>
+                  <input type="radio" name="light_pollution_reduction" value="no"> <span>No</span>
+                </div>
+              </div>
+            </div>       
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="example-text-input" class="form-control-label text-sm">Does the building have a policy for managing the site sustainably?</label> 
+                <div class="text-s p-3">
+                  <input type="radio" name="site_management" value="yes"> <span>Yes</span> <br>
+                  <input type="radio" name="site_management" value="no"> <span>No</span>
+                </div>
+              </div>
+            </div>       
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="example-text-input" class="form-control-label text-sm">Does the building have a policy for managing the site sustainably??</label> 
+                <div class="text-s p-3">
+                  <input type="radio" name="site_plan" value="yes"> <span>Yes</span> <br>
+                  <input type="radio" name="site_plan" value="no"> <span>No</span>
+                </div>
+              </div>
+            </div>       
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+  </main> 
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+<script src="{{ config.ASSETS_ROOT }}/js/plugins/chartjs.min.js"></script>
+<script>
+  var ctx1 = document.getElementById("chart-pie-carbon").getContext("2d");
+  new Chart(ctx1, {
+    type: "pie",
+    data: {
+      labels: ["A", "B", "C", "D"],
+      datasets: [{
+        backgroundColor: ["#F79540", "#F7D08A", "#CCC", "#969696"],
+        data: [35, 25, 20, 20],
+        borderWidth: 2,
+        borderColor: "#fff",
+        hoverBorderWidth: 3,
+        hoverBorderColor: "#fff"
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: "bottom",
+          labels: {
+            boxWidth: 12,
+            font: {
+              size: 12,
+              family: "Open Sans",
+              style: 'normal',
+              lineHeight: 1
+            },
+          }
+        }
+      },
+      animation: {
+        animateScale: true,
+        animateRotate: true
+      }
+    }
+  });
+  var ctx2 = document.getElementById("chart-pie-power").getContext("2d");
+  new Chart(ctx2, {
+    type: "pie",
+    data: {
+      labels: ["A", "B", "C", "D"],
+      datasets: [{
+        backgroundColor: ["#F79540", "#F7D08A", "#CCC", "#969696"],
+        data: [35, 25, 20, 20],
+        borderWidth: 2,
+        borderColor: "#fff",
+        hoverBorderWidth: 3,
+        hoverBorderColor: "#fff"
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: "bottom",
+          labels: {
+            boxWidth: 12,
+            font: {
+              size: 12,
+              family: "Open Sans",
+              style: 'normal',
+              lineHeight: 1
+            },
+          }
+        }
+      },
+      animation: {
+        animateScale: true,
+        animateRotate: true
+      }
+    }
+  });
+  var ctx3 = document.getElementById("chart-pie-cost").getContext("2d");
+  new Chart(ctx3, {
+    type: "pie",
+    data: {
+      labels: ["A", "B", "C", "D"],
+      datasets: [{
+        backgroundColor: ["#F79540", "#F7D08A", "#CCC", "#969696"],
+        data: [35, 25, 20, 20],
+        borderWidth: 2,
+        borderColor: "#fff",
+        hoverBorderWidth: 3,
+        hoverBorderColor: "#fff"
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: "bottom",
+          labels: {
+            boxWidth: 12,
+            font: {
+              size: 12,
+              family: "Open Sans",
+              style: 'normal',
+              lineHeight: 1
+            },
+          }
+        }
+      },
+      animation: {
+        animateScale: true,
+        animateRotate: true
+      }
+    }
+  });
+  
+</script>
+{% endblock javascripts %}

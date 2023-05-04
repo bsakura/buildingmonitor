@@ -1,0 +1,321 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Profile {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+  <div class="position-absolute w-100 min-height-300 top-0" 
+       style="background-image: url('{{ config.ASSETS_ROOT }}/img/profile-layout-header.jpg'); background-position-y: 50%;">
+    <span class="mask bg-primary opacity-6"></span>
+  </div>
+      
+  {% include "includes/sidenav.html" %}
+
+  <main class="main-content position-relative border-radius-lg ">
+
+    {% include "includes/navigation.html" %}
+
+    <div class="card mx-4 mt-4">
+      <div class="card-body p-3">
+        <div class="card-header pb-0">
+          <div class="d-flex align-items-center">
+            <p class="mb-0 text-lg">IT Asset Category Data</p>     
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="example-text-input" class="form-control-label">Category</label>
+                <select class="form-control" id="asset-category">
+                  <option value="Server">Server</option>
+                  <option value="Komputer">Computer</option>
+                  <option value="Telepon">Phone</option>
+                  <option value="Jaringan">Network</option>
+                  <option value="Audio Visual">Audio Visual</option>
+                  <option value="Pemrosesan Gambar">Imaging</option>
+                </select>
+              </div>
+            </div>       
+          </div>
+        </div>
+      </div>
+    </div>
+    
+          
+          <div class="row">
+            <div class="col-12">
+              <div class="card mx-4 mt-4">
+                <div class="card-header pb-0">
+                  <h6>IT Asset</h6>
+                </div>
+                <div class="card-body px-0 pt-0 pb-2">
+                  <div class="table-responsive p-0">
+                    <table class="table align-items-center mb-0">
+                      <thead>
+                        <tr>
+                          <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">IT Asset Category</th>
+                          <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">IT Asset Subcategory</th>
+                          <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Jumlah Unit</th>
+                          <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Energy</th>
+                          <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Cost</th>
+                          <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Carbon</th>
+                        </tr>
+                      </thead>
+                      <tbody class="text-center" id="table-body">
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+    <div class="container-fluid py-4">
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="card z-index-2 h-250">
+            <div class="card-header pb-0 pt-3 bg-transparent">
+              <h6 class="text-capitalize">Carbon</h6>
+            </div>
+            <div class="card-body p-3">
+              <div class="chart">
+                <canvas id="chart-pie-carbon" class="chart-canvas" height="240"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="card z-index-2 h-250">
+            <div class="card-header pb-0 pt-3 bg-transparent">
+              <h6 class="text-capitalize">Energy</h6>
+            </div>
+            <div class="card-body p-3">
+              <div class="chart">
+                <canvas id="chart-pie-energy" class="chart-canvas" height="240"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="card z-index-2 h-250">
+            <div class="card-header pb-0 pt-3 bg-transparent">
+              <h6 class="text-capitalize">Cost</h6>
+            </div>
+            <div class="card-body p-3">
+              <div class="chart">
+                <canvas id="chart-pie-cost" class="chart-canvas" height="240"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!--create me a div and card for string. there should be a heading called initiative then there should be a string paragraph in the body-->
+    <div class="container-fluid py-4">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="card z-index-2 h-250">
+            <div class="card-header pb-0 pt-3 bg-transparent">
+              <h6 class="text-capitalize">As-is Initiative</h6>
+            </div>
+            <div class="card-body">
+              <p class="p-3 d-flex align-items-center"> Sabalabala</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+  </main> 
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+<script src="{{ config.ASSETS_ROOT }}/js/plugins/chartjs.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+  // Initialize the pie chart
+  var cpcarbon = document.getElementById("chart-pie-carbon").getContext("2d");
+  var pieChart = new Chart(cpcarbon, {
+    type: "pie",
+    data: {
+      labels: [],
+      datasets: [{
+        backgroundColor: [],
+        data: [],
+        borderWidth: 2,
+        borderColor: "#fff",
+        hoverBorderWidth: 3,
+        hoverBorderColor: "#fff"
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: "bottom",
+          labels: {
+            boxWidth: 12,
+            font: {
+              size: 12,
+              family: "Open Sans",
+              style: 'normal',
+              lineHeight: 1
+            },
+          }
+        }
+      },
+      animation: {
+        animateScale: true,
+        animateRotate: true
+      }
+    }
+  });
+  var cpcost = document.getElementById("chart-pie-cost").getContext("2d");
+  var pieChartCost = new Chart(cpcost, {
+    type: "pie",
+    data: {
+      labels: [],
+      datasets: [{
+        backgroundColor: [],
+        data: [],
+        borderWidth: 2,
+        borderColor: "#fff",
+        hoverBorderWidth: 3,
+        hoverBorderColor: "#fff"
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: "bottom",
+          labels: {
+            boxWidth: 12,
+            font: {
+              size: 12,
+              family: "Open Sans",
+              style: 'normal',
+              lineHeight: 1
+            },
+          }
+        }
+      },
+      animation: {
+        animateScale: true,
+        animateRotate: true
+      }
+    }
+  });
+
+  var cpenergy = document.getElementById("chart-pie-energy").getContext("2d");
+  var pieChartEnergy = new Chart(cpenergy, {
+    type: "pie",
+    data: {
+      labels: [],
+      datasets: [{
+        backgroundColor: [],
+        data: [],
+        borderWidth: 2,
+        borderColor: "#fff",
+        hoverBorderWidth: 3,
+        hoverBorderColor: "#fff"
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: "bottom",
+          labels: {
+            boxWidth: 12,
+            font: {
+              size: 12,
+              family: "Open Sans",
+              style: 'normal',
+              lineHeight: 1
+            },
+          }
+        }
+      },
+      animation: {
+        animateScale: true,
+        animateRotate: true
+      }
+    }
+  });
+
+
+  // Set up event listener for the dropdown list
+  $('#asset-category').change(function() {
+    var category = $('#asset-category').val();
+
+    // Fetch data for the table
+    fetch("/category_data/" + category)
+      .then(response => response.json())
+      .then(data => {
+        // Update the HTML table with the new data
+        var tableBody = $('#table-body');
+        tableBody.empty();
+
+        $.each(data.category_details, function(index, item) {
+          var row = $('<tr/>');
+          row.append($('<td/>').html(item['IT Asset Category']));
+          row.append($('<td/>').html(item['IT Asset Subcategory']));
+          row.append($('<td/>').html(item['Jumlah Unit']));
+          row.append($('<td/>').html(item['Energy']));
+          row.append($('<td/>').html(item['Cost']));
+          row.append($('<td/>').html(item['Carbon']));
+          tableBody.append(row);
+        });
+        fetch("/asset_data_pie/" + category + "/Carbon")
+          .then(response => response.json())
+          .then(data => {
+            // Update the data and options of the pie chart with the new data
+            pieChart.data.labels = data.subcategory_array;
+            pieChart.data.datasets[0].backgroundColor = ['#FCA5F1', '#FFCF95', '#FF9AA2', '#A0C1B8', '#C2DFFF', '#F0C987'];
+            pieChart.data.datasets[0].data = data.target_array;
+            pieChart.update();
+          })
+          .catch(error => console.log(error));
+          fetch("/asset_data_pie/" + category + "/Energy")
+          .then(response => response.json())
+          .then(data => {
+            // Update the data and options of the pie chart with the new data
+            pieChartCost.data.labels = data.subcategory_array;
+            pieChartCost.data.datasets[0].backgroundColor = ['#FCA5F1', '#FFCF95', '#FF9AA2', '#A0C1B8', '#C2DFFF', '#F0C987'];
+            pieChartCost.data.datasets[0].data = data.target_array;
+            pieChartCost.update();
+          })
+          .catch(error => console.log(error));
+          fetch("/asset_data_pie/" + category + "/Cost")
+          .then(response => response.json())
+          .then(data => {
+            // Update the data and options of the pie chart with the new data
+            pieChartEnergy.data.labels = data.subcategory_array;
+            pieChartEnergy.data.datasets[0].backgroundColor = ['#FCA5F1', '#FFCF95', '#FF9AA2', '#A0C1B8', '#C2DFFF', '#F0C987'];
+            pieChartEnergy.data.datasets[0].data = data.target_array;
+            pieChartEnergy.update();
+          })
+          .catch(error => console.log(error));
+
+      })
+      .catch(error => console.log(error));
+  });
+});
+
+
+  
+</script>
+{% endblock javascripts %}
