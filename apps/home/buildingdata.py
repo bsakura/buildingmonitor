@@ -2,14 +2,11 @@
 
 from apps import db
 
-class Building(db.Model):
-    __tablename__ = 'Building'
+class Buildings(db.Model):
+    __tablename__ = 'Buildings'
 
-    id = db.Column(db.Integer, primary_key=True)
-    buildingname = db.Column(db.String)
-    electricity = db.Column(db.Float)
-    water = db.Column(db.Float)
-    assassment = db.Column(db.Int)
+    building_id = db.Column(db.Integer, primary_key=True)
+    building_name = db.Column(db.String)
 
     def __init__(self, **kwargs):
         for property, value in kwargs.items():

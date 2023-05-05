@@ -20,92 +20,60 @@
 
     <div class="card mx-4 mt-4">
       <div class="card-body p-3">
-        <div class="card-header pb-0">
-          <div class="d-flex align-items-center">
-            <p class="mb-0 text-lg">Leeds Assassment</p>     
-          </div>
-        </div>
-        <div class="card-body">
-          <p class="text-uppercase text-m">Location and Transportation</p>
-          <div class="row">
-            <div class="col-md-12">
-              <div class="form-group">
-                <label for="example-text-input" class="form-control-label text-sm">Does the building have a transportation management plan that encourages sustainable transportation options?</label> 
-                <div class="text-s p-3">
-                  <input type="radio" name="alternative_transportation" value="yes"> <span>Yes</span> <br>
-                  <input type="radio" name="alternative_transportation" value="no"> <span>No</span>
-                </div>
-              </div>
-            </div>       
-          </div>
-          <p class="text-uppercase text-m">Sustainable Sites</p>
-          <div class="row">
-            <div class="col-md-12">
-              <div class="form-group">
-                <label for="example-text-input" class="form-control-label text-sm">Does this building have a policy for protecting the site sustainably?</label> 
-                <div class="text-s p-3">
-                  <input type="radio" name="site_protect" value="yes"> <span>Yes</span> <br>
-                  <input type="radio" name="site_protect" value="no"> <span>No</span>
-                </div>
-              </div>
-            </div>       
-          </div>
-          <div class="row">
-            <div class="col-md-12">
-              <div class="form-group">
-                <label for="example-text-input" class="form-control-label text-sm">Does the building reduce outdoor water use through efficient irrigation and landscaping practices? </label> 
-                <div class="text-s p-3">
-                  <input type="radio" name="rain_management" value="yes"> <span>Yes</span> <br>
-                  <input type="radio" name="rain_management" value="no"> <span>No</span>
-                </div>
-              </div>
-            </div>       
-          </div>
-          <div class="row">
-            <div class="col-md-12">
-              <div class="form-group">
-                <label for="example-text-input" class="form-control-label text-sm">Does the building implement measures to reduce the urban heat island effect, such as green roofs or cool pavements?</label> 
-                <div class="text-s p-3">
-                  <input type="radio" name="heat_island_reduction" value="yes"> <span>Yes</span> <br>
-                  <input type="radio" name="heat_island_reduction" value="no"> <span>No</span>
-                </div>
-              </div>
-            </div>       
-          </div>
-          <div class="row">
-            <div class="col-md-12">
-              <div class="form-group">
-                <label for="example-text-input" class="form-control-label text-sm">Does the building reduce light pollution by using dark sky compliant outdoor lighting fixtures?</label> 
-                <div class="text-s p-3">
-                  <input type="radio" name="light_pollution_reduction" value="yes"> <span>Yes</span> <br>
-                  <input type="radio" name="light_pollution_reduction" value="no"> <span>No</span>
-                </div>
-              </div>
-            </div>       
-          </div>
-          <div class="row">
-            <div class="col-md-12">
-              <div class="form-group">
-                <label for="example-text-input" class="form-control-label text-sm">Does the building have a policy for managing the site sustainably?</label> 
-                <div class="text-s p-3">
-                  <input type="radio" name="site_management" value="yes"> <span>Yes</span> <br>
-                  <input type="radio" name="site_management" value="no"> <span>No</span>
-                </div>
-              </div>
-            </div>       
-          </div>
-          <div class="row">
-            <div class="col-md-12">
-              <div class="form-group">
-                <label for="example-text-input" class="form-control-label text-sm">Does the building have a policy for managing the site sustainably??</label> 
-                <div class="text-s p-3">
-                  <input type="radio" name="site_plan" value="yes"> <span>Yes</span> <br>
-                  <input type="radio" name="site_plan" value="no"> <span>No</span>
-                </div>
-              </div>
-            </div>       
-          </div>
-        </div>
+        <!DOCTYPE html>
+<html>
+  <head>
+    <title>LEED Questionnaire</title>
+  </head>
+  <body>
+    <form action="/submit_leed" method="POST">
+      <h2>Building Information</h2>
+      <p>Building ID: <input type="text" name="building_id"></p>
+      <p>Date: <input type="date" name="date"></p>
+      <h2>Location and Transportation</h2>
+      <p>Is the project located in a dense area with access to public transportation?</p>
+      <input type="radio" name="location_transportation" value="1">Yes (+1)<br>
+      <input type="radio" name="location_transportation" value="0">No (0)<br>
+      
+      <h2>Sustainable Sites</h2>
+      <p>Has the project undertaken any measures to protect, preserve or restore natural habitats on the site or within the project boundaries?</p>
+      <input type="radio" name="sustainable_sites_1" value="1">Yes (+1)<br>
+      <input type="radio" name="sustainable_sites_1" value="0">No (0)<br>
+
+      <p>Has the project undertaken any measures to protect, preserve or restore natural habitats on the site or within the project boundaries?</p>
+      <input type="radio" name="sustainable_sites_2" value="4">Yes (+1)<br>
+      <input type="radio" name="sustainable_sites_2" value="0">No (0)<br>
+      
+      <h2>Water Efficiency</h2>
+      <p>Does the project have low-flow fixtures and efficient irrigation systems?</p>
+      <input type="radio" name="water_efficiency" value="1">Yes (+1)<br>
+      <input type="radio" name="water_efficiency" value="0">No (0)<br>
+      
+      <h2>Energy and Atmosphere</h2>
+      <p>Does the building meet energy performance standards?</p>
+      <input type="radio" name="energy_atmosphere" value="1">Yes (+1)<br>
+      <input type="radio" name="energy_atmosphere" value="0">No (0)<br>
+      
+      <h2>Materials and Resources</h2>
+      <p>Has the project implemented sustainable material choices, such as recycled content and regional sourcing?</p>
+      <input type="radio" name="materials_resources" value="1">Yes (+1)<br>
+      <input type="radio" name="materials_resources" value="0">No (0)<br>
+      
+      <h2>Indoor Environmental Quality</h2>
+      <p>Is there a plan in place for indoor air quality management and green cleaning practices?</p>
+      <input type="radio" name="indoor_environmental_quality" value="1">Yes (+1)<br>
+      <input type="radio" name="indoor_environmental_quality" value="0">No (0)<br>
+      
+      <h2>Innovation</h2>
+      <p>Has the project implemented any innovative strategies or technologies that go beyond standard LEED requirements?</p>
+      <input type="radio" name="innovation" value="1">Yes (+1)<br>
+      <input type="radio" name="innovation" value="0">No (0)<br>
+      
+      <input type="submit" value="Submit">
+    </form>
+  </body>
+</html>
+
       </div>
     </div>
 

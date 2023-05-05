@@ -4,12 +4,15 @@ Copyright (c) 2019 - present AppSeed.us
 """
 
 from apps.home import blueprint
-from flask import render_template, request
+from flask import redirect, render_template, request, url_for
 from flask_login import login_required
 from jinja2 import TemplateNotFound
 from .electricity import get_predicted_kwh, get_actual_kwh, get_predicted_cf, get_actual_cf, get_actual_liter, get_predicted_liter
 from flask import jsonify
 from .asset import *
+from .leedsdata import *
+from .buildingdata import *
+from datetime import datetime
 
 """
 add predicted_kwh from electricity.py to the render_template so it can be used in building-data.html
@@ -62,7 +65,6 @@ def asset():
     counts = stacked_count_category()
     return jsonify(counts)
 
-
 @blueprint.route('/donut-data')
 def pie_data():
     data = pie_count_category()
@@ -71,8 +73,78 @@ def pie_data():
 @blueprint.route('/index')
 @login_required
 def index():
-
     return render_template('home/index.html', segment='index')
+
+
+# Route to get all Leed entries
+@blueprint.route('/leed', methods=['GET'])
+def get_leed():
+    leed = Leed.query.all()
+    results = []
+    for entry in leed:
+        result = {
+            'building_id': entry.building_id,
+            'location_transportation': entry.location_transportation,
+            'sustainable_sites': entry.sustainable_sites,
+            'water_efficiency': entry.water_efficiency,
+            'energy_atmosphere': entry.energy_atmosphere,
+            'materials_resources': entry.materials_resources,
+            'indoor_environmental_quality': entry.indoor_environmental_quality,
+            'innovation': entry.innovation,
+            'total_leed': entry.total_leed
+        }
+        results.append(result)
+    return jsonify(results)
+
+# Route to get a specific Leed entry by building ID
+@blueprint.route('/leed/<int:building_id>', methods=['GET'])
+def get_leed_by_id(building_id):
+    entry = Leed.query.filter_by(building_id=building_id).first()
+    if not entry:
+        return jsonify({'message': 'Leed entry not found'})
+    result = {
+        'building_id': entry.building_id,
+        'location_transportation': entry.location_transportation,
+        'sustainable_sites': entry.sustainable_sites,
+        'water_efficiency': entry.water_efficiency,
+        'energy_atmosphere': entry.energy_atmosphere,
+        'materials_resources': entry.materials_resources,
+        'indoor_environmental_quality': entry.indoor_environmental_quality,
+        'innovation': entry.innovation,
+        'total_leed': entry.total_leed
+    }
+    return jsonify(result)
+
+
+@blueprint.route('/submit_leed', methods=['POST'])
+def submit_leed():
+    building_id = request.form['building_id']
+    location_transportation = int(request.form['location_transportation'])
+    sustainable_sites = int(request.form['sustainable_sites_1']) + int(request.form['sustainable_sites_2'])
+    water_efficiency = int(request.form['water_efficiency'])
+    energy_atmosphere = int(request.form['energy_atmosphere'])
+    materials_resources = int(request.form['materials_resources'])
+    indoor_environmental_quality = int(request.form['indoor_environmental_quality'])
+    innovation = int(request.form['innovation'])
+    total_leed = location_transportation + sustainable_sites + water_efficiency + energy_atmosphere + materials_resources + indoor_environmental_quality + innovation
+    date_str = request.form['date']
+    date_obj = datetime.strptime(date_str, '%Y-%m-%d').date()
+    
+    leed = Leed(building_id=building_id,
+                location_transportation=location_transportation,
+                sustainable_sites=sustainable_sites,
+                water_efficiency=water_efficiency,
+                energy_atmosphere=energy_atmosphere,
+                materials_resources=materials_resources,
+                indoor_environmental_quality=indoor_environmental_quality,
+                innovation=innovation,
+                total_leed=total_leed,
+                date=date_obj)
+    
+    db.session.add(leed)
+    db.session.commit()
+    
+    return redirect('/')
 
 
 @blueprint.route('/<template>')
