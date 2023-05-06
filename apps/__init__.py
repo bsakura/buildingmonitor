@@ -4,6 +4,8 @@ Copyright (c) 2019 - present AppSeed.us
 """
 
 import os
+import logging
+
 
 from flask import Flask
 from flask_login import LoginManager
@@ -13,6 +15,11 @@ from importlib import import_module
 
 db = SQLAlchemy()
 login_manager = LoginManager()
+
+def configure_logging():
+    # register root logging
+    logging.basicConfig(level=logging.DEBUG)
+    logging.getLogger('werkzeug').setLevel(logging.INFO)
 
 
 def register_extensions(app):
@@ -54,4 +61,7 @@ def create_app(config):
     register_extensions(app)
     register_blueprints(app)
     configure_database(app)
+    configure_logging()
+
     return app
+

@@ -1,0 +1,71 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Profile {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+  <div class="position-absolute w-100 min-height-300 top-0" 
+       style="background-image: url('{{ config.ASSETS_ROOT }}/img/profile-layout-header.jpg'); background-position-y: 50%;">
+    <span class="mask bg-primary opacity-6"></span>
+  </div>
+      
+  {% include "includes/sidenav.html" %}
+
+  <main class="main-content position-relative border-radius-lg ">
+
+    {% include "includes/navigation.html" %}
+
+
+
+    <div class="container-fluid py-4">
+
+      <div class="row">
+        <div class="col-md-8">
+          <div class="card">
+            <div class="card-header pb-0">
+              <div class="d-flex align-items-center">
+                <p class="mb-0">Electricity Form</p>
+              </div>
+            </div>
+            <div class="card-body">
+    <form action="/submit_electricity" method="POST">
+              
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="example-text-input" class="form-control-label">Building ID</label>
+                    <input class="form-control" type="text" name="building_id">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="example-text-input" class="form-control-label">Date</label>
+                    <input class="form-control" type="date" name="date">
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="example-text-input" class="form-control-label">Electricity</label>
+                      <input class="form-control" type="text" name="electricity_usage">
+                    </div>
+                  </div>
+                </div>
+
+        </div>
+      </div>
+
+      <input type="submit" value="Submit">
+    </form>
+
+      {% include "includes/footer.html" %}
+
+    </div>
+
+  </main> 
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}{% endblock javascripts %}

@@ -3,6 +3,7 @@
 Copyright (c) 2019 - present AppSeed.us
 """
 
+from sqlalchemy import func
 from apps.home import blueprint
 from flask import redirect, render_template, request, url_for
 from flask_login import login_required
@@ -13,10 +14,17 @@ from .asset import *
 from .leedsdata import *
 from .buildingdata import *
 from datetime import datetime
+from .electricitydata import *
+import logging
+
 
 """
 add predicted_kwh from electricity.py to the render_template so it can be used in building-data.html
 """
+# add logger
+LOG = logging.getLogger(__name__)
+
+
 
 @blueprint.route('/building-data/<building>')
 @login_required
@@ -115,6 +123,54 @@ def get_leed_by_id(building_id):
     }
     return jsonify(result)
 
+# Route to add data input from a form
+@blueprint.route('/submit_electricity', methods=['POST'])
+def submit_electricity():
+    building_id = request.form['building_id']
+    date_str = request.form['date']
+    date_obj = datetime.strptime(date_str, '%Y-%m-%d').date()
+    electricity_usage = int(request.form['electricity_usage'])
+    new_electricity = Electricity(building_id=building_id, date=date_obj, electricity_usage=electricity_usage)
+    db.session.add(new_electricity)
+    db.session.commit()
+    return redirect('/')
+
+@blueprint.route('/electricity_usage/<int:building_id>')
+def show_electricity_usage_for_building(building_id):
+    electricity_usage = Electricity.query.filter_by(building_id=building_id).all()
+    return render_template('electricity_usage.html', electricity_usage=electricity_usage)
+
+@blueprint.route('/electricity_usage/recent/<int:building_id>')
+def show_electricity_usage_for_recent_date(building_id):
+    latest_date = db.session.query(func.max(Electricity.date)).filter_by(building_id=building_id).scalar()
+    LOG.info("latest_date: %s", latest_date)
+    electricity_usage = Electricity.query.filter_by(building_id=building_id, date=latest_date).first()
+    LOG.info("ASD")
+    LOG.info(electricity_usage)
+
+    if electricity_usage is None:
+        return jsonify(error="No data found for building")
+
+    # Create a dictionary containing the relevant information
+    data = {
+        # "building_id": electricity_usage.building_id,
+        # "date": electricity_usage.date.isoformat(),
+        "electricity_usage": int(electricity_usage.electricity_usage)
+    }
+
+    # jsonify electricity_usage
+    LOG.info("fsa")
+    LOG.info((data))
+    LOG.info("bbb")
+    LOG.info((data['electricity_usage']))
+
+
+    # LOG.info("data: %s", data)
+
+    return (jsonify(data))
+
+
+
 
 @blueprint.route('/submit_leed', methods=['POST'])
 def submit_leed():
@@ -140,7 +196,7 @@ def submit_leed():
                 innovation=innovation,
                 total_leed=total_leed,
                 date=date_obj)
-    
+    print(leed)
     db.session.add(leed)
     db.session.commit()
     

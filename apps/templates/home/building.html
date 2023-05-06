@@ -197,21 +197,34 @@
 
   ];
 
+  // const buildingValues = ['CRCS', 'CAS', 'Energi', 'Kimia', 'PP', 'PAU', 'CADL', 'TI', 'Mesin', 'LabtekX', 'LabtekXI', 'TPB', 'CampusCenter', 'AulaBarat', 'AulaTimur', 'CIBE', 'Konversi', 'Fisi', 'LabtekIXBC', 'STT', 'TL', 'LabtekV', 'LabtekVI', 'LabtekVII', 'LabtekVIII', 'Sabuga'];
+  // const fetchRequests = buildingValues.map(buildingValue => fetch(`/building-data/${buildingValue}`).then(response => response.json()));
+  // Promise.all(fetchRequests)
+  // .then(dataArray => {
+  //   dataArray.forEach((data, index) => {
+  //     const buildingValue = buildingValues[index];
+  //     const latestElectricity = data.actual_kwh.slice(-1)[0][buildingValue];
+  //     const latestWater = data.actual_liter.slice(-1)[0][buildingValue];
+  //     const latestCF = data.actual_cf.slice(-1)[0][buildingValue];
+
+  //     cardData[index].electricity = latestElectricity;
+  //     cardData[index].water = latestWater;
+  //     cardData[index].emission = latestCF;
+  //   });
+
+  //   generateCards();
+  // })
   const buildingValues = ['CRCS', 'CAS', 'Energi', 'Kimia', 'PP', 'PAU', 'CADL', 'TI', 'Mesin', 'LabtekX', 'LabtekXI', 'TPB', 'CampusCenter', 'AulaBarat', 'AulaTimur', 'CIBE', 'Konversi', 'Fisi', 'LabtekIXBC', 'STT', 'TL', 'LabtekV', 'LabtekVI', 'LabtekVII', 'LabtekVIII', 'Sabuga'];
-  const fetchRequests = buildingValues.map(buildingValue => fetch(`/building-data/${buildingValue}`).then(response => response.json()));
-  Promise.all(fetchRequests)
+
+const fetchRequests = buildingValues.map((_, index) => fetch(`/electricity_usage/recent/${index+1}`)
+  .then(response => response.json()));
+
+Promise.all(fetchRequests)
   .then(dataArray => {
     dataArray.forEach((data, index) => {
-      const buildingValue = buildingValues[index];
-      const latestElectricity = data.actual_kwh.slice(-1)[0][buildingValue];
-      const latestWater = data.actual_liter.slice(-1)[0][buildingValue];
-      const latestCF = data.actual_cf.slice(-1)[0][buildingValue];
-
+      const latestElectricity = data.electricity_usage;
       cardData[index].electricity = latestElectricity;
-      cardData[index].water = latestWater;
-      cardData[index].emission = latestCF;
     });
-
     generateCards();
   })
   .catch(error => {
