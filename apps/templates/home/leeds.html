@@ -3,7 +3,76 @@
 {% block title %} Profile {% endblock title %}
 
 <!-- Specific CSS goes HERE -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block stylesheets %}
+<style>
+
+.container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-left: 10px;
+  margin-top : 10px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 400;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default radio button */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Create a custom radio button */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+  border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.container input:checked ~ .checkmark {
+  background-color: #a474b9;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.container .checkmark:after {
+ 	top: 9px;
+	left: 9px;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: white;
+}
+</style>
+{% endblock stylesheets %}
 
 {% block content %}
 
@@ -25,79 +94,789 @@
           <div class="card">
             <div class="card-header pb-0">
               <div class="d-flex align-items-center">
-                <p class="mb-0">LEED Assessment</p>
+                <h2 class="mb-0">LEED Assessment</h2>
+                
               </div>
             </div>
-            <div class="card-body">
-              <p class="text-uppercase text-sm">Location and Transportation</p>
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">Can this site be reached through various public transportation?</label>
-                    <input  type="radio" value="5"> Yes it can <br>
-                    <input  type="radio" value="5"> No <br>
-                    <input name="custom-radio-1" class="custom-control-input" id="customRadio5" type="radio">
+            
+            <form action="/submit_leed" id="leeds" method="POST">
+              <div class="card-body">
+                <div>
+                  <p class="form-control-label text-sm" class="form-control-label" >Building</p>
+                  <select class="form-control" name="building_id">
+                    <option value="1">CRCS</option>
+                    <option value="2">CAS</option>
+                    <option value="3">Energi</option>
+                    <option value="4">Kimia</option>
+                    <option value="5">PP</option>
+                    <option value="6">PAU</option>
+                    <option value="7">CADL</option>
+                    <option value="8">TI</option>
+                    <option value="9">Mesin</option>
+                    <option value="10">LabtekX</option>
+                    <option value="11">LabtekXI</option>
+                    <option value="12">TPB</option>
+                    <option value="13">CampusCenter</option>
+                    <option value="14">AulaBarat</option>
+                    <option value="15">AulaTimur</option>
+                    <option value="16">CIBE</option>
+                    <option value="17">Konversi</option>
+                    <option value="18">Fisi</option>
+                    <option value="19">LabtekIXBC</option>
+                    <option value="20">STT</option>
+                    <option value="21">TL</option>
+                    <option value="22">LabtekV</option>
+                    <option value="23">LabtekVI</option>
+                    <option value="24">LabtekVII</option>
+                    <option value="25">LabtekVIII</option>
+                    <option value="26">Sabuga</option>
+                  </select>
+                </div>
+                <div class="mt-4">
+                  <p class="form-control-label text-sm">Date</p>
+                    <input type="date" class="form-control" name="date">
+                </div>
+                <div class="mt-4">
+                  {% if show_warning %}
+                  <div id="warning-message" style="color:red;">This building already has a submission for the selected month.</div>
+                  {% endif %}
+               </div>
+              <div class="card-body">
+                <p class="text-uppercase text-m">Location and Transportation</p>
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Can this site be reached through various public transportation?</label>
+                      <label class="container">Yes
+                        <input type="radio"  name="location_transportation_1" value="5">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="location_transportation_1" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Is there a bike storage or parking facility available on site?</label>
+                      <label class="container">Yes
+                        <input type="radio"  name="location_transportation_2" value="5">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="location_transportation_2" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Is there a car-sharing program available within 1/2 mile of the building site?</label>
+                      <label class="container">Yes
+                        <input type="radio"  name="location_transportation_3" value="5">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="location_transportation_3" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>               
+              </div>
+              <div class="card-body">
+                <p class="text-uppercase text-m">Sustainable Sites</p>
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Does the building have a written Site Management Policy in place that outlines the goals and objectives for sustainable site management practices? </label>
+                      <label class="container">Yes
+                        <input type="radio"  name="sustainable_sites_1" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="sustainable_sites_1" value="-1">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Has the building undertaken any measures to protect, preserve or restore natural habitats on the site or within the building boundaries?</label>
+                      <label class="container">Yes
+                        <input type="radio"  name="sustainable_sites_2" value="2">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="sustainable_sites_2" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Are there any rainwater management strategies implemented, such as rain gardens, bioswales, or green roofs?</label>
+                      <label class="container">Yes
+                        <input type="radio"  name="sustainable_sites_3" value="3">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="sustainable_sites_3" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>  
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Are there any strategies implemented to reduce the heat island effect, such as using reflective roofing materials, providing shade trees or green roofs?</label>
+                      <label class="container">Yes
+                        <input type="radio"  name="sustainable_sites_4" value="2">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="sustainable_sites_4" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>  
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Has the building implemented any measures to reduce light pollution, such as using outdoor lighting fixtures with low glare and light trespass, or installing motion sensors to control lighting use?</label>
+                      <label class="container">Yes
+                        <input type="radio"  name="sustainable_sites_5" value="1">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="sustainable_sites_5" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>     
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Are there any practices implemented to minimize disruption to natural habitats and ecosystems during construction and site maintenance activities?</label>
+                      <label class="container">Yes
+                        <input type="radio"  name="sustainable_sites_6" value="1">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="sustainable_sites_6" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>    
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Has the building developed a Site Improvement Plan to guide ongoing management and maintenance of the site?</label>
+                      <label class="container">Yes
+                        <input type="radio"  name="sustainable_sites_7" value="1">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="sustainable_sites_7" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>               
+              </div>
+              <div class="card-body">
+                <p class="text-uppercase text-m">Water Efficiency</p>
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Has the building implemented any measures to reduce indoor water use, such as using low-flow fixtures, installing efficient appliances, or implementing water conservation practices?</label>
+                      <label class="container">Yes
+                        <input type="radio"  name="water_efficiency_1" value="5">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="water_efficiency_1" value="-1">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Does the building have building-level water metering in place to track overall water consumption? </label>
+                      <label class="container">Yes
+                        <input type="radio"  name="water_efficiency_2" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="water_efficiency_2" value="-1">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Are there any measures taken to reduce outdoor water use, such as using drought-tolerant landscaping, implementing rainwater harvesting systems, or using efficient irrigation systems?</label>
+                      <label class="container">Yes
+                        <input type="radio"  name="water_efficiency_3" value="2">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="water_efficiency_3" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>  
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Has the building implemented any measures to reduce cooling tower water use, such as using high-efficiency cooling tower systems or implementing water treatment and reuse systems?</label>
+                      <label class="container">Yes
+                        <input type="radio"  name="water_efficiency_4" value="3">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="water_efficiency_4" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>  
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Has the building implemented individual water metering for each tenant or occupant within the building?</label>
+                      <label class="container">Yes
+                        <input type="radio"  name="water_efficiency_5" value="2">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="water_efficiency_5" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>     
+                            
+              </div>
+              <div class="card-body">
+                <p class="text-uppercase text-m">Energy and Atmosphere</p>
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Has the building implemented any Energy Efficiency Best Management Practices to reduce energy consumption, such as implementing an energy management system, conducting regular energy audits, or setting energy reduction goals? </label>
+                      <label class="container">Yes
+                        <input type="radio"  name="energy_atmosphere_1" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="energy_atmosphere_1" value="-1">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Does the building meet the Minimum Energy Performance requirements for the building's energy systems, including HVAC, lighting, and building envelope?</label>
+                      <label class="container">Yes
+                        <input type="radio"  name="energy_atmosphere_2" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="energy_atmosphere_2" value="-1">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Does the building have building-level energy metering in place to track overall energy consumption? </label>
+                      <label class="container">Yes
+                        <input type="radio"  name="energy_atmosphere_3" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="energy_atmosphere_3" value="-1">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>  
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Has the building implemented fundamental refrigerant management practices, such as minimizing refrigerant leaks and using low- or no-global warming potential refrigerants? </label>
+                      <label class="container">Yes
+                        <input type="radio"  name="energy_atmosphere_4" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="energy_atmosphere_4" value="-1">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>  
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Has the building conducted an Existing Building Commissioning analysis to identify opportunities for improving energy efficiency and reducing energy consumption?</label>
+                      <label class="container">Yes
+                        <input type="radio"  name="energy_atmosphere_5" value="2">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="energy_atmosphere_5" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>     
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Has the building implemented any measures identified through Existing Building Commissioning analysis to improve energy efficiency and reduce energy consumption?</label>
+                      <label class="container">Yes
+                        <input type="radio"  name="energy_atmosphere_6" value="2">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="energy_atmosphere_6" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>    
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Does the building have an Ongoing Commissioning plan in place to regularly review and optimize the building's energy systems for maximum efficiency and performance?</label>
+                      <label class="container">Yes
+                        <input type="radio"  name="energy_atmosphere_7" value="3">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="energy_atmosphere_7" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div> 
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Are there any strategies implemented to optimize energy performance, such as using high-efficiency lighting, HVAC systems, and building envelope design?</label>
+                      <label class="container">Yes
+                        <input type="radio"  name="energy_atmosphere_8" value="20">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="energy_atmosphere_8" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div> 
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Has the building implemented advanced energy metering systems to track energy consumption for individual systems or components within the building?</label>
+                      <label class="container">Yes
+                        <input type="radio"  name="energy_atmosphere_9" value="2">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="energy_atmosphere_9" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div> 
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm"> Has the building implemented Demand Response strategies, such as using energy storage or implementing load shedding practices, to reduce energy consumption during peak demand periods? </label>
+                      <label class="container">Yes
+                        <input type="radio"  name="energy_atmosphere_10" value="3">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="energy_atmosphere_10" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div> 
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm"> Has the building implemented renewable energy systems, such as solar or wind power, or purchased carbon offsets to reduce the building's carbon footprint? </label>
+                      <label class="container">Yes
+                        <input type="radio"  name="energy_atmosphere_11" value="5">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="energy_atmosphere_11" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div> 
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Has the building implemented Enhanced Refrigerant Management practices, such as using natural refrigerants or installing leak detection systems?</label>
+                      <label class="container">Yes
+                        <input type="radio"  name="energy_atmosphere_12" value="1">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="energy_atmosphere_12" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>               
+              </div>
+              <div class="card-body">
+                <p class="text-uppercase text-m">Materials and Resources</p>
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">
+                        Does the building have a purchasing policy in place that considers the environmental and health impacts of ongoing purchases, such as cleaning products, office supplies, and electronics?
+                        </label>
+                      <label class="container">Yes
+                        <input type="radio"  name="material_resources_1" value="1">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="material_resources_1" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Does the building have a purchasing policy for lamps that prioritizes the use of energy-efficient, long-lasting, and non-toxic lamps?</label>
+                      <label class="container">Yes
+                        <input type="radio"  name="material_resources_2" value="1">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="material_resources_2" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Does the building have a facility maintenance and renovations policy in place that prioritizes the use of sustainable materials and practices?</label>
+                      <label class="container">Yes
+                        <input type="radio"  name="material_resources_3" value="2">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="material_resources_3" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>  
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Are there measures implemented to reduce solid waste generation on an ongoing basis, such as implementing a recycling program, reducing paper use, and minimizing packaging waste?</label>
+                      <label class="container">Yes
+                        <input type="radio"  name="material_resources_4" value="2">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="material_resources_4" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>  
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">What measures has the building implemented to reduce solid waste generation during facility maintenance and renovation buildings, such as deconstruction, salvage, and recycling of materials?</label>
+                      <label class="container">Yes
+                        <input type="radio"  name="material_resources_5" value="2">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="material_resources_5" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>     
+                            
+              </div>
+              <div class="card-body">
+                <p class="text-uppercase text-m">Indoor Environmental Quality</p>
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Has the building implemented measures to ensure that indoor air quality meets or exceeds minimum standards for acceptable air quality? </label>
+                      <label class="container">Yes
+                        <input type="radio"  name="indoor_environmental_quality_1" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="indoor_environmental_quality_1" value="-1">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Does the building have a policy in place to control exposure to environmental tobacco smoke?</label>
+                      <label class="container">Yes
+                        <input type="radio"  name="indoor_environmental_quality_2" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="indoor_environmental_quality_2" value="-1">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Has the building implemented a Green Cleaning Policy that specifies the use of environmentally preferable cleaning products and practices? </label>
+                      <label class="container">Yes
+                        <input type="radio"  name="indoor_environmental_quality_3" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="indoor_environmental_quality_3" value="-1">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>  
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Has the building implemented an Indoor Air Quality Management Program that includes a written plan for maintaining acceptable indoor air quality levels? </label>
+                      <label class="container">Yes
+                        <input type="radio"  name="indoor_environmental_quality_4" value="2">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="indoor_environmental_quality_4" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>  
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Has the building implemented any enhanced strategies to improve indoor air quality beyond minimum requirements, such as installing air filtration systems or using low-emitting materials?</label>
+                      <label class="container">Yes
+                        <input type="radio"  name="indoor_environmental_quality_5" value="2">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="indoor_environmental_quality_5" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>     
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Are there any measures implemented to ensure thermal comfort for building occupants, such as providing individual temperature controls or using passive solar design strategies?</label>
+                      <label class="container">Yes
+                        <input type="radio"  name="indoor_environmental_quality_6" value="1">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="indoor_environmental_quality_6" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>    
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Are there any  strategies implemented to provide adequate interior lighting that is energy-efficient and promotes occupant comfort and productivity?</label>
+                      <label class="container">Yes
+                        <input type="radio"  name="indoor_environmental_quality_7" value="2">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="indoor_environmental_quality_7" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div> 
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Has the building incorporated strategies to maximize natural daylight and quality views for building occupants?</label>
+                      <label class="container">Yes
+                        <input type="radio"  name="indoor_environmental_quality_8" value="4">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="indoor_environmental_quality_8" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div> 
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Does the building conduct regular assessments of the effectiveness of its Green Cleaning Program and custodial operations? </label>
+                      <label class="container">Yes
+                        <input type="radio"  name="indoor_environmental_quality_9" value="1">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="indoor_environmental_quality_9" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div> 
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm"> Are there any specific environmentally preferable cleaning products and materials used in the Green Cleaning Program? </label>
+                      <label class="container">Yes
+                        <input type="radio"  name="indoor_environmental_quality_10" value="1">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="indoor_environmental_quality_10" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div> 
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm"> Are there any specific environmentally preferable equipment used in the Green Cleaning Program?  </label>
+                      <label class="container">Yes
+                        <input type="radio"  name="indoor_environmental_quality_11" value="1">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="indoor_environmental_quality_11" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div> 
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Does the building have an Integrated Pest Management program in place that emphasizes the use of non-toxic pest control methods? </p>
+                      <label class="container">Yes
+                        <input type="radio"  name="indoor_environmental_quality_12" value="2">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="indoor_environmental_quality_12" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>     
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Has the building conducted a survey of building occupants to assess their satisfaction with indoor environmental quality and comfort?</p>
+                      <label class="container">Yes
+                        <input type="radio"  name="indoor_environmental_quality_13" value="1">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="indoor_environmental_quality_13" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>               
+              </div>
+              <div class="card-body">
+                <p class="text-uppercase text-m">Innovation</p>
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Has the building team identified any innovative strategies or technologies to enhance the sustainability performance of the building beyond what is required by the LEED rating system</label>
+                      <label class="container">Yes
+                        <input type="radio"  name="innovation_1" value="5">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="innovation_1" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class=" row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <p class="form-control-label text-sm">Has the building team implemented any pilot credits or alternative compliance paths offered by the LEED rating system?</label>
+                      <label class="container">Yes
+                        <input type="radio"  name="innovation_2" value="1">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label class="container">No
+                        <input type="radio" name="innovation_2" value="0">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                
+              </div>
+              
+              <button type="submit"  class="btn btn-lg btn-primary btn-lg w-100 mt-4 mb-0" value="Submit"> Submit </button>
 
-                  </div>
-                </div>
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">Email address</label>
-                    <input class="form-control" type="email" value="jesse@example.com">
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">First name</label>
-                    <input class="form-control" type="text" value="Jesse">
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">Last name</label>
-                    <input class="form-control" type="text" value="Lucky">
-                  </div>
-                </div>
-              </div>
-              <hr class="horizontal dark">
-              <p class="text-uppercase text-sm">Contact Information</p>
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">Address</label>
-                    <input class="form-control" type="text" value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09">
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">City</label>
-                    <input class="form-control" type="text" value="New York">
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">Country</label>
-                    <input class="form-control" type="text" value="United States">
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">Postal code</label>
-                    <input class="form-control" type="text" value="437300">
-                  </div>
-                </div>
-              </div>
-              <hr class="horizontal dark">
-              <p class="text-uppercase text-sm">About me</p>
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">About me</label>
-                    <input class="form-control" type="text" value="A beautiful Dashboard for Bootstrap 5. It is Free and Open Source.">
-                  </div>
-                </div>
-              </div>
-            </div>
+
+            </form>
           </div>
         </div>
        
@@ -106,68 +885,7 @@
 
     </div>
 
-    <div class="card mx-4 mt-4">
-      <div class="card-body p-3">
-        <!DOCTYPE html>
-<html>
-  <head>
-    <title>LEED Questionnaire</title>
-  </head>
-  <body>
-    <form action="/submit_leed" method="POST">
-      <h2>Building Information</h2>
-      <p>Building ID: <input type="text" name="building_id"></p>
-      <p>Date: <input type="date" name="date"></p>
-      <h2>Location and Transportation</h2>
-      <p>Is the project located in a dense area with access to public transportation?</p>
-      <input type="radio" name="location_transportation" value="1">Yes (+1)<br>
-      <input type="radio" name="location_transportation" value="0">No (0)<br>
-      
-      <h2>Sustainable Sites</h2>
-      <p>Has the project undertaken any measures to protect, preserve or restore natural habitats on the site or within the project boundaries?</p>
-      <input type="radio" name="sustainable_sites_1" value="1">Yes (+1)<br>
-      <input type="radio" name="sustainable_sites_1" value="0">No (0)<br>
 
-      <p>Has the project undertaken any measures to protect, preserve or restore natural habitats on the site or within the project boundaries?</p>
-      <input type="radio" name="sustainable_sites_2" value="4">Yes (+1)<br>
-      <input type="radio" name="sustainable_sites_2" value="0">No (0)<br>
-      
-      <h2>Water Efficiency</h2>
-      <p>Does the project have low-flow fixtures and efficient irrigation systems?</p>
-      <input type="radio" name="water_efficiency" value="1">Yes (+1)<br>
-      <input type="radio" name="water_efficiency" value="0">No (0)<br>
-      
-      <h2>Energy and Atmosphere</h2>
-      <p>Does the building meet energy performance standards?</p>
-      <input type="radio" name="energy_atmosphere" value="1">Yes (+1)<br>
-      <input type="radio" name="energy_atmosphere" value="0">No (0)<br>
-      
-      <h2>Materials and Resources</h2>
-      <p>Has the project implemented sustainable material choices, such as recycled content and regional sourcing?</p>
-      <input type="radio" name="materials_resources" value="1">Yes (+1)<br>
-      <input type="radio" name="materials_resources" value="0">No (0)<br>
-      
-      <h2>Indoor Environmental Quality</h2>
-      <p>Is there a plan in place for indoor air quality management and green cleaning practices?</p>
-      <input type="radio" name="indoor_environmental_quality" value="1">Yes (+1)<br>
-      <input type="radio" name="indoor_environmental_quality" value="0">No (0)<br>
-      
-      <h2>Innovation</h2>
-      <p>Has the project implemented any innovative strategies or technologies that go beyond standard LEED requirements?</p>
-      <input type="radio" name="innovation" value="1">Yes (+1)<br>
-      <input type="radio" name="innovation" value="0">No (0)<br>
-      
-      <input type="submit" value="Submit">
-    </form>
-  </body>
-</html>
-
-      </div>
-    </div>
-
-
-
-  </main> 
 
 {% endblock content %}
 
@@ -175,117 +893,28 @@
 {% block javascripts %}
 <script src="{{ config.ASSETS_ROOT }}/js/plugins/chartjs.min.js"></script>
 <script>
-  var ctx1 = document.getElementById("chart-pie-carbon").getContext("2d");
-  new Chart(ctx1, {
-    type: "pie",
-    data: {
-      labels: ["A", "B", "C", "D"],
-      datasets: [{
-        backgroundColor: ["#F79540", "#F7D08A", "#CCC", "#969696"],
-        data: [35, 25, 20, 20],
-        borderWidth: 2,
-        borderColor: "#fff",
-        hoverBorderWidth: 3,
-        hoverBorderColor: "#fff"
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          position: "bottom",
-          labels: {
-            boxWidth: 12,
-            font: {
-              size: 12,
-              family: "Open Sans",
-              style: 'normal',
-              lineHeight: 1
-            },
-          }
-        }
-      },
-      animation: {
-        animateScale: true,
-        animateRotate: true
+  function validateForm() {
+    // Get all form fields
+    var formFields = document.querySelectorAll('#leeds input, #leeds select');
+
+    // Loop through each field and check that it has a value
+    for (var i = 0; i < formFields.length; i++) {
+      if (!formFields[i].value) {
+        alert('Please fill in all fields');
+        return false; // Prevent form submission
       }
     }
-  });
-  var ctx2 = document.getElementById("chart-pie-power").getContext("2d");
-  new Chart(ctx2, {
-    type: "pie",
-    data: {
-      labels: ["A", "B", "C", "D"],
-      datasets: [{
-        backgroundColor: ["#F79540", "#F7D08A", "#CCC", "#969696"],
-        data: [35, 25, 20, 20],
-        borderWidth: 2,
-        borderColor: "#fff",
-        hoverBorderWidth: 3,
-        hoverBorderColor: "#fff"
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          position: "bottom",
-          labels: {
-            boxWidth: 12,
-            font: {
-              size: 12,
-              family: "Open Sans",
-              style: 'normal',
-              lineHeight: 1
-            },
-          }
-        }
-      },
-      animation: {
-        animateScale: true,
-        animateRotate: true
-      }
+
+    // All fields have values, so submit the form
+    return true;
+  }
+
+  // Attach the validateForm function to the form's submit event
+  document.querySelector('#leeds').addEventListener('submit', function(e) {
+    if (!validateForm()) {
+      e.preventDefault(); // Prevent form submission
     }
   });
-  var ctx3 = document.getElementById("chart-pie-cost").getContext("2d");
-  new Chart(ctx3, {
-    type: "pie",
-    data: {
-      labels: ["A", "B", "C", "D"],
-      datasets: [{
-        backgroundColor: ["#F79540", "#F7D08A", "#CCC", "#969696"],
-        data: [35, 25, 20, 20],
-        borderWidth: 2,
-        borderColor: "#fff",
-        hoverBorderWidth: 3,
-        hoverBorderColor: "#fff"
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          position: "bottom",
-          labels: {
-            boxWidth: 12,
-            font: {
-              size: 12,
-              family: "Open Sans",
-              style: 'normal',
-              lineHeight: 1
-            },
-          }
-        }
-      },
-      animation: {
-        animateScale: true,
-        animateRotate: true
-      }
-    }
-  });
-  
+ 
 </script>
 {% endblock javascripts %}

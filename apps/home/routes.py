@@ -4,6 +4,7 @@ Copyright (c) 2019 - present AppSeed.us
 """
 
 from sqlalchemy import func
+from sqlalchemy.exc import IntegrityError
 from apps.home import blueprint
 from flask import redirect, render_template, request, url_for
 from flask_login import login_required
@@ -96,7 +97,7 @@ def get_leed():
             'sustainable_sites': entry.sustainable_sites,
             'water_efficiency': entry.water_efficiency,
             'energy_atmosphere': entry.energy_atmosphere,
-            'materials_resources': entry.materials_resources,
+            'material_resources': entry.material_resources,
             'indoor_environmental_quality': entry.indoor_environmental_quality,
             'innovation': entry.innovation,
             'total_leed': entry.total_leed
@@ -116,7 +117,7 @@ def get_leed_by_id(building_id):
         'sustainable_sites': entry.sustainable_sites,
         'water_efficiency': entry.water_efficiency,
         'energy_atmosphere': entry.energy_atmosphere,
-        'materials_resources': entry.materials_resources,
+        'material_resources': entry.material_resources,
         'indoor_environmental_quality': entry.indoor_environmental_quality,
         'innovation': entry.innovation,
         'total_leed': entry.total_leed
@@ -174,32 +175,37 @@ def show_electricity_usage_for_recent_date(building_id):
 
 @blueprint.route('/submit_leed', methods=['POST'])
 def submit_leed():
-    building_id = request.form['building_id']
-    location_transportation = int(request.form['location_transportation'])
-    sustainable_sites = int(request.form['sustainable_sites_1']) + int(request.form['sustainable_sites_2'])
-    water_efficiency = int(request.form['water_efficiency'])
-    energy_atmosphere = int(request.form['energy_atmosphere'])
-    materials_resources = int(request.form['materials_resources'])
-    indoor_environmental_quality = int(request.form['indoor_environmental_quality'])
-    innovation = int(request.form['innovation'])
-    total_leed = location_transportation + sustainable_sites + water_efficiency + energy_atmosphere + materials_resources + indoor_environmental_quality + innovation
+    building_id = int(request.form['building_id'])
+    location_transportation = int(request.form['location_transportation_1']) + int(request.form['location_transportation_2']) + int(request.form['location_transportation_3'])
+    sustainable_sites = int(request.form['sustainable_sites_1']) + int(request.form['sustainable_sites_2']) + int(request.form['sustainable_sites_3']) + int(request.form['sustainable_sites_4']) + int(request.form['sustainable_sites_5']) + int(request.form['sustainable_sites_6']) + int(request.form['sustainable_sites_7'])
+    water_efficiency = int(request.form['water_efficiency_1']) + int(request.form['water_efficiency_2']) + int(request.form['water_efficiency_3']) + int(request.form['water_efficiency_4']) + int(request.form['water_efficiency_5'])
+    energy_atmosphere = int(request.form['energy_atmosphere_1']) + int(request.form['energy_atmosphere_2']) + int(request.form['energy_atmosphere_3']) + int(request.form['energy_atmosphere_4']) + int(request.form['energy_atmosphere_5']) + int(request.form['energy_atmosphere_6']) + int(request.form['energy_atmosphere_7']) + int(request.form['energy_atmosphere_8']) + int(request.form['energy_atmosphere_9']) + int(request.form['energy_atmosphere_10']) + int(request.form['energy_atmosphere_11']) + int(request.form['energy_atmosphere_12'])
+    material_resources = int(request.form['material_resources_1']) + int(request.form['material_resources_2']) + int(request.form['material_resources_3']) + int(request.form['material_resources_4'])+ int(request.form['material_resources_5'])
+    indoor_environmental_quality = int(request.form['indoor_environmental_quality_1']) + int(request.form['indoor_environmental_quality_2']) + int(request.form['indoor_environmental_quality_3']) + int(request.form['indoor_environmental_quality_4']) + int(request.form['indoor_environmental_quality_5']) + int(request.form['indoor_environmental_quality_6']) + int(request.form['indoor_environmental_quality_7']) + int(request.form['indoor_environmental_quality_8']) + int(request.form['indoor_environmental_quality_9']) + int(request.form['indoor_environmental_quality_10']) + int(request.form['indoor_environmental_quality_11']) + int(request.form['indoor_environmental_quality_12']) + int(request.form['indoor_environmental_quality_13'])
+    innovation = int(request.form['innovation_1']) + int(request.form['innovation_2']) 
+    total_leed = location_transportation + sustainable_sites + water_efficiency + energy_atmosphere + material_resources + indoor_environmental_quality + innovation
     date_str = request.form['date']
     date_obj = datetime.strptime(date_str, '%Y-%m-%d').date()
+    date_obj = date_obj.replace(day=1)
     
     leed = Leed(building_id=building_id,
                 location_transportation=location_transportation,
                 sustainable_sites=sustainable_sites,
                 water_efficiency=water_efficiency,
                 energy_atmosphere=energy_atmosphere,
-                materials_resources=materials_resources,
+                materials_resources=material_resources,
                 indoor_environmental_quality=indoor_environmental_quality,
                 innovation=innovation,
                 total_leed=total_leed,
                 date=date_obj)
     print(leed)
-    db.session.add(leed)
-    db.session.commit()
-    
+    try:
+        db.session.add(leed)
+        db.session.commit()
+    except IntegrityError as e:
+        db.session.rollback()
+        error_info = str(e.__dict__.get('orig', e))
+        return render_template('home/leeds.html', show_warning=True)
     return redirect('/')
 
 
