@@ -216,20 +216,52 @@
   // })
   const buildingValues = ['CRCS', 'CAS', 'Energi', 'Kimia', 'PP', 'PAU', 'CADL', 'TI', 'Mesin', 'LabtekX', 'LabtekXI', 'TPB', 'CampusCenter', 'AulaBarat', 'AulaTimur', 'CIBE', 'Konversi', 'Fisi', 'LabtekIXBC', 'STT', 'TL', 'LabtekV', 'LabtekVI', 'LabtekVII', 'LabtekVIII', 'Sabuga'];
 
-const fetchRequests = buildingValues.map((_, index) => fetch(`/electricity_usage/recent/${index+1}`)
-  .then(response => response.json()));
+  const fetchRequests = buildingValues.map((_, index) => {
+  const electricityPromise = fetch(`/electricity_usage/recent/${index+1}`)
+    .then(response => response.json());
+
+  const carbonPromise = fetch(`/carbon_usage/recent/${index+1}`)
+    .then(response => response.json());
+
+  const waterPromise = fetch(`/water_usage/recent/${index+1}`)
+    .then(response => response.json());
+
+  return Promise.all([electricityPromise, carbonPromise, waterPromise])
+    .then(([electricityData, carbonData, waterData]) => {
+      return {
+        electricity: electricityData.electricity_usage,
+        carbon: carbonData.carbon_footprint,
+        water: waterData.water_usage
+      };
+    });
+});
 
 Promise.all(fetchRequests)
   .then(dataArray => {
     dataArray.forEach((data, index) => {
-      const latestElectricity = data.electricity_usage;
-      cardData[index].electricity = latestElectricity;
+      cardData[index].electricity = data.electricity;
+      cardData[index].emission = data.carbon
+      cardData[index].water = data.water;
     });
     generateCards();
   })
   .catch(error => {
     console.error(error);
   });
+// const fetchRequests = buildingValues.map((_, index) => fetch(`/electricity_usage/recent/${index+1}`)
+//   .then(response => response.json()));
+
+// Promise.all(fetchRequests)
+//   .then(dataArray => {
+//     dataArray.forEach((data, index) => {
+//       const latestElectricity = data.electricity_usage;
+//       cardData[index].electricity = latestElectricity;
+//     });
+//     generateCards();
+//   })
+//   .catch(error => {
+//     console.error(error);
+//   });
 
   function generateCards(selectedZone) {
     const cardContainer = document.getElementById('cardContainer');

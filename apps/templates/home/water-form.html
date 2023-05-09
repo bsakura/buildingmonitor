@@ -1,6 +1,6 @@
 {% extends 'layouts/base.html' %}
 
-{% block title %} Profile {% endblock title %}
+{% block title %} Water {% endblock title %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -27,11 +27,11 @@
           <div class="card">
             <div class="card-header pb-0">
               <div class="d-flex align-items-center">
-                <p class="mb-0">Electricity Form</p>
+                <p class="mb-0">Water Form</p>
               </div>
             </div>
             <div class="card-body">
-    <form action="/submit_electricity" method="POST">
+    <form action="/submit_water" method="POST">
               
               <div class="row">
                 <div class="col-md-12">
@@ -81,8 +81,8 @@
                 <div class="row">
                   <div class="col-md-12">
                     <div class="form-group">
-                      <label for="example-text-input" class="form-control-label">Electricity</label>
-                      <input class="form-control" type="text" name="electricity_usage">
+                      <label for="example-text-input" class="form-control-label">Water Usage</label>
+                      <input class="form-control" type="text" name="water_usage">
                     </div>
                   </div>
                 </div>

@@ -9,13 +9,15 @@ from apps.home import blueprint
 from flask import redirect, render_template, request, url_for
 from flask_login import login_required
 from jinja2 import TemplateNotFound
-from .electricity import get_predicted_kwh, get_actual_kwh, get_predicted_cf, get_actual_cf, get_actual_liter, get_predicted_liter
+from .electricity import *
 from flask import jsonify
 from .asset import *
 from .leedsdata import *
 from .buildingdata import *
 from datetime import datetime
 from .electricitydata import *
+from .waterdata import *
+from .carbondata import *
 import logging
 
 
@@ -127,12 +129,25 @@ def get_leed_by_id(building_id):
 # Route to add data input from a form
 @blueprint.route('/submit_electricity', methods=['POST'])
 def submit_electricity():
-    building_id = request.form['building_id']
+    building_id = int(request.form['building_id'])
     date_str = request.form['date']
     date_obj = datetime.strptime(date_str, '%Y-%m-%d').date()
+    date_obj = date_obj.replace(day=1)
     electricity_usage = int(request.form['electricity_usage'])
     new_electricity = Electricity(building_id=building_id, date=date_obj, electricity_usage=electricity_usage)
     db.session.add(new_electricity)
+    db.session.commit()
+    return redirect('/')
+
+@blueprint.route('/submit_water', methods=['POST'])
+def submit_water():
+    building_id = int(request.form['building_id'])
+    date_str = request.form['date']
+    date_obj = datetime.strptime(date_str, '%Y-%m-%d').date()
+    date_obj = date_obj.replace(day=1)
+    water_usage = int(request.form['water_usage'])
+    new_water = Water(building_id=building_id, date=date_obj, water_usage=water_usage)
+    db.session.add(new_water)
     db.session.commit()
     return redirect('/')
 
@@ -144,34 +159,46 @@ def show_electricity_usage_for_building(building_id):
 @blueprint.route('/electricity_usage/recent/<int:building_id>')
 def show_electricity_usage_for_recent_date(building_id):
     latest_date = db.session.query(func.max(Electricity.date)).filter_by(building_id=building_id).scalar()
-    LOG.info("latest_date: %s", latest_date)
     electricity_usage = Electricity.query.filter_by(building_id=building_id, date=latest_date).first()
-    LOG.info("ASD")
-    LOG.info(electricity_usage)
-
+ 
     if electricity_usage is None:
         return jsonify(error="No data found for building")
 
-    # Create a dictionary containing the relevant information
     data = {
-        # "building_id": electricity_usage.building_id,
-        # "date": electricity_usage.date.isoformat(),
         "electricity_usage": int(electricity_usage.electricity_usage)
     }
 
-    # jsonify electricity_usage
-    LOG.info("fsa")
-    LOG.info((data))
-    LOG.info("bbb")
-    LOG.info((data['electricity_usage']))
+    return (jsonify(data))
 
+#show water usage for building most recent
+@blueprint.route('/water_usage/recent/<int:building_id>')
+def show_water_usage_for_recent_date(building_id):
+    latest_date = db.session.query(func.max(Water.date)).filter_by(building_id=building_id).scalar()
+    water_usage = Water.query.filter_by(building_id=building_id, date=latest_date).first()
+ 
+    if water_usage is None:
+        return jsonify(error="No data found for building")
 
-    # LOG.info("data: %s", data)
+    data = {
+        "water_usage": int(water_usage.water_usage)
+    }
 
     return (jsonify(data))
 
+#show carbon usage for most recent building
+@blueprint.route('/carbon_usage/recent/<int:building_id>')
+def show_carbon_usage_for_recent_date(building_id):
+    latest_date = db.session.query(func.max(Carbon.date)).filter_by(building_id=building_id).scalar()
+    carbon_footprint = Carbon.query.filter_by(building_id=building_id, date=latest_date).first()
+ 
+    if carbon_footprint is None:
+        return jsonify(error="No data found for building")
 
+    data = {
+        "carbon_footprint": int(carbon_footprint.carbon_footprint)
+    }
 
+    return (jsonify(data))
 
 @blueprint.route('/submit_leed', methods=['POST'])
 def submit_leed():
