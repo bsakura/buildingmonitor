@@ -10,22 +10,6 @@
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link {% if 'electricity-form' in segment %} active {% endif %}" href="/electricity-form.html">
-            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
-            </div>
-            <span class="nav-link-text ms-1">Electricity Form</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link {% if 'water-form' in segment %} active {% endif %}" href="/water-form.html">
-            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
-            </div>
-            <span class="nav-link-text ms-1">Water Form</span>
-          </a>
-        </li>
-        <li class="nav-item">
           <a class="nav-link {% if 'dash' in segment %} active {% endif %}" href="/dash.html">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-credit-card text-primary text-sm opacity-10"></i>
@@ -36,12 +20,28 @@
         <li class="nav-item">
           <a class="nav-link {% if 'building' in segment %} active {% endif %}" href="/building.html">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="ni ni-building text-success text-sm opacity-10"></i>
+              <i class="ni ni-building text-info text-sm opacity-10"></i>
             </div>
             <span class="nav-link-text ms-1">Building</span>
           </a>
         </li>
         <li class="nav-item">
+          <a class="nav-link {% if 'electricity-form' in segment %} active {% endif %}" href="/electricity-form.html">
+            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="ni ni-atom text-danger text-sm opacity-10"></i>
+            </div>
+            <span class="nav-link-text ms-1">Electricity Form</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if 'water-form' in segment %} active {% endif %}" href="/water-form.html">
+            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="ni ni-air-baloon text-success text-sm opacity-10"></i>
+            </div>
+            <span class="nav-link-text ms-1">Water Form</span>
+          </a>
+        </li>
+        <!-- <li class="nav-item">
           <a class="nav-link {% if 'asset' in segment %} active {% endif %}" href="/asset.html">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-app text-info text-sm opacity-10"></i>
@@ -57,11 +57,11 @@
             </div>
             <span class="nav-link-text ms-1">Asset Data</span>
           </a>
-        </li>
+        </li> -->
         <li class="nav-item">
           <a class="nav-link {% if 'leeds' in segment %} active {% endif %}" href="/leeds.html">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>
+              <i class="ni ni-planet text-dark text-sm opacity-10"></i>
             </div>
             <span class="nav-link-text ms-1">Leed Assessment</span>
           </a>
