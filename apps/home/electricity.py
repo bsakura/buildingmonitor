@@ -41,13 +41,18 @@ def get_predicted_kwh(building):
         predictions.append(yhat[0])
         history = np.vstack([history, test_data[t]])
 
+    
+
     # create a dataframe of predictions and actual values
     pred_df = pd.DataFrame(predictions, index=test.index, columns=df.columns)
     actual_df = test
 
     # get the predicted values as a list of dictionaries
     predicted_kwh = pred_df[building].reset_index().to_dict('records')
+    actual_kwh = actual_df[building].reset_index().to_dict('records')
 
+    print("predicted:",predicted_kwh)
+    print("actual:",actual_kwh)
 
     # return the predicted values
     return predicted_kwh

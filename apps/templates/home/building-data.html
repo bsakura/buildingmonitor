@@ -23,10 +23,11 @@
               <div class="card z-index-2 h-200">
                 <div class="card-header pb-0 pt-3 bg-transparent">
                   <h6 class="text-capitalize">Carbon Footprint</h6>
-                  <p class="text-sm mb-0">
-                    <i class="fa fa-arrow-up text-success"></i>
-                    <span class="font-weight-bold">4% more</span> in 2021
-                  </p>
+                  <select name= "year" id="year" onchange="updateChart()">
+                    <option value="2022">2022</option>
+                    <option value="2021">2021</option>
+                    <option value="2020">2020</option> 
+                  </select>
                 </div>
                 <div class="card-body p-3">
                   <div class="chart">
@@ -199,8 +200,11 @@
             <div class="card-header pb-0 pt-3 bg-transparent">
               <h6 class="text-capitalize">Electricity</h6>
               <p class="text-sm mb-0">
-                <i class="fa fa-arrow-up text-success"></i>
-                <span class="font-weight-bold">4% more</span> in 2021
+                <select name= "yearelectricity" id="yearelectricity" onchange="updateChartElectricity()">
+                  <option value="2022">2022</option>
+                  <option value="2021">2021</option>
+                  <option value="2020">2020</option> 
+                </select>
               </p>
             </div>
             <div class="card-body p-3">
@@ -215,8 +219,11 @@
             <div class="card-header pb-0 pt-3 bg-transparent">
               <h6 class="text-capitalize">Water</h6>
               <p class="text-sm mb-0">
-                <i class="fa fa-arrow-up text-success"></i>
-                <span class="font-weight-bold">4% more</span> in 2021
+                <select name= "yearwater" id="yearwater" onchange="updateChartWater()">
+                  <option value="2022">2022</option>
+                  <option value="2021">2021</option>
+                  <option value="2020">2020</option> 
+                </select>
               </p>
             </div>
             <div class="card-body p-3">
@@ -250,13 +257,30 @@
   <script>
   const params = new URLSearchParams(window.location.search);
   const buildingValue = params.get('building');
+  const yearValue = "2022";
   var ctx1 = document.getElementById("chart-line-carbon-footprint").getContext("2d");
 
   fetch(`/building-data/${buildingValue}`)
     .then((response) => response.json())
     .then((data) => {
-      const predictedCF = data.predicted_cf.map((d) => d[buildingValue]);
-      const actualCF = data.actual_cf.map((d) => d[buildingValue]);
+      const dataArray = Object.entries(data);
+
+      const filteredDataActual = dataArray[0][1].map((d) => {
+          return { Date: d.Date, Actual: d[buildingValue] };
+      }).filter((d) => {
+          return new Date(d.Date).getFullYear() == yearValue;
+      });
+      console.log(filteredDataActual)
+
+      const filteredDataPredicted = dataArray[3][1].map((d) => {
+          return { Date: d.Date, Predicted: d[buildingValue] };
+      }).filter((d) => {
+          return new Date(d.Date).getFullYear() == yearValue;
+      });
+      console.log("filtered",filteredDataPredicted)
+      const predictedCF = filteredDataPredicted.map((d) => d.Predicted);
+      const actualCF = filteredDataActual.map((d) => d.Actual);
+      
 
       // Create the chart using the retrieved predictedKwh and actualKwh data
       new Chart(ctx1, {
@@ -351,8 +375,23 @@
   fetch(`/building-data/${buildingValue}`)
     .then((response) => response.json())
     .then((data) => {
-      const predictedKwH = data.predicted_kwh.map((d) => d[buildingValue]);
-      const actualKwH = data.actual_kwh.map((d) => d[buildingValue]);
+      const dataArray = Object.entries(data);
+      
+      const filteredDataActual = dataArray[1][1].map((d) => {
+          return { Date: d.Date, Actual: d[buildingValue] };
+      }).filter((d) => {
+          return new Date(d.Date).getFullYear() == yearValue;
+      });
+      console.log(filteredDataActual)
+
+      const filteredDataPredicted = dataArray[4][1].map((d) => {
+          return { Date: d.Date, Predicted: d[buildingValue] };
+      }).filter((d) => {
+          return new Date(d.Date).getFullYear() == yearValue;
+      });
+      console.log("filtered",filteredDataPredicted)
+      const predictedKwH = filteredDataPredicted.map((d) => d.Predicted);
+      const actualKwH = filteredDataActual.map((d) => d.Actual);
 
       // Create the chart using the retrieved predictedKwh and actualKwh data
       new Chart(ctx2, {
@@ -449,8 +488,23 @@
     fetch(`/building-data/${buildingValue}`)
       .then((response) => response.json())
       .then((data) => {
-        const predictedLiter = data.predicted_liter.map((d) => d[buildingValue]);
-        const actualLiter = data.actual_liter.map((d) => d[buildingValue]);
+      const dataArray = Object.entries(data);
+        
+        const filteredDataActual = dataArray[2][1].map((d) => {
+            return { Date: d.Date, Actual: d[buildingValue] };
+        }).filter((d) => {
+            return new Date(d.Date).getFullYear() == yearValue;
+        });
+        console.log(filteredDataActual)
+
+        const filteredDataPredicted = dataArray[5][1].map((d) => {
+            return { Date: d.Date, Predicted: d[buildingValue] };
+        }).filter((d) => {
+            return new Date(d.Date).getFullYear() == yearValue;
+        });
+        console.log("filtered",filteredDataPredicted)
+        const predictedLiter = filteredDataPredicted.map((d) => d.Predicted);
+        const actualLiter = filteredDataActual.map((d) => d.Actual);
 
         // Create the chart using the retrieved predictedKwh and actualKwh data
         new Chart(ctx3, {
@@ -539,6 +593,131 @@
           },
         });
       })
+      function updateChart() {
+        const yearValue = document.getElementById("year").value;
+        const params = new URLSearchParams(window.location.search);
+        const buildingValue = params.get('building');
+        // get the existing Chart instance
+        const chartInstance = Chart.instances[0];
+
+        // fetch the data from the server
+        fetch(`/building-data/${buildingValue}`)
+        .then((response) => response.json())
+        .then((data) => {
+          // convert the dictionary to an array of key-value pairs
+          const dataArray = Object.entries(data);
+          console.log(dataArray)
+
+          const filteredDataActual = dataArray[0][1].map((d) => {
+              return { Date: d.Date, Actual: d[buildingValue] };
+          }).filter((d) => {
+              return new Date(d.Date).getFullYear() == yearValue;
+          });
+          console.log(filteredDataActual)
+
+          const filteredDataPredicted = dataArray[3][1].map((d) => {
+              return { Date: d.Date, Predicted: d[buildingValue] };
+          }).filter((d) => {
+              return new Date(d.Date).getFullYear() == yearValue;
+          });
+          console.log("filtered",filteredDataPredicted)
+          const predictedCF = filteredDataPredicted.map((d) => d.Predicted);
+          const actualCF = filteredDataActual.map((d) => d.Actual);
+          console.log("actualCF", actualCF)
+
+          console.log("predictedCF", predictedCF)
+          
+          
+          chartInstance.data.datasets[0].data = actualCF;
+          chartInstance.data.datasets[1].data = predictedCF;
+          chartInstance.update();
+        });
+
+      }
+
+      function updateChartElectricity() {
+        const yearValue = document.getElementById("yearelectricity").value;
+        const params = new URLSearchParams(window.location.search);
+        const buildingValue = params.get('building');
+        // get the existing Chart instance
+        const chartInstance = Chart.instances[1];
+
+        // fetch the data from the server
+        fetch(`/building-data/${buildingValue}`)
+        .then((response) => response.json())
+        .then((data) => {
+          // convert the dictionary to an array of key-value pairs
+          const dataArray = Object.entries(data);
+          console.log(dataArray)
+
+          const filteredDataActual = dataArray[1][1].map((d) => {
+              return { Date: d.Date, Actual: d[buildingValue] };
+          }).filter((d) => {
+              return new Date(d.Date).getFullYear() == yearValue;
+          });
+          console.log(filteredDataActual)
+
+          const filteredDataPredicted = dataArray[4][1].map((d) => {
+              return { Date: d.Date, Predicted: d[buildingValue] };
+          }).filter((d) => {
+              return new Date(d.Date).getFullYear() == yearValue;
+          });
+          console.log("filtered",filteredDataPredicted)
+          const predictedCF = filteredDataPredicted.map((d) => d.Predicted);
+          const actualCF = filteredDataActual.map((d) => d.Actual);
+          console.log("actualCF", actualCF)
+
+          console.log("predictedCF", predictedCF)
+          
+          
+          chartInstance.data.datasets[0].data = actualCF;
+          chartInstance.data.datasets[1].data = predictedCF;
+          chartInstance.update();
+        });
+
+      }
+
+      function updateChartWater() {
+        const yearValue = document.getElementById("yearwater").value;
+        const params = new URLSearchParams(window.location.search);
+        const buildingValue = params.get('building');
+        // get the existing Chart instance
+        const chartInstance = Chart.instances[2];
+
+        // fetch the data from the server
+        fetch(`/building-data/${buildingValue}`)
+        .then((response) => response.json())
+        .then((data) => {
+          // convert the dictionary to an array of key-value pairs
+          const dataArray = Object.entries(data);
+          console.log(dataArray)
+
+          const filteredDataActual = dataArray[2][1].map((d) => {
+              return { Date: d.Date, Actual: d[buildingValue] };
+          }).filter((d) => {
+              return new Date(d.Date).getFullYear() == yearValue;
+          });
+          console.log(filteredDataActual)
+
+          const filteredDataPredicted = dataArray[5][1].map((d) => {
+              return { Date: d.Date, Predicted: d[buildingValue] };
+          }).filter((d) => {
+              return new Date(d.Date).getFullYear() == yearValue;
+          });
+          console.log("filtered",filteredDataPredicted)
+          const predictedCF = filteredDataPredicted.map((d) => d.Predicted);
+          const actualCF = filteredDataActual.map((d) => d.Actual);
+          console.log("actualCF", actualCF)
+
+          console.log("predictedCF", predictedCF)
+          
+          
+          chartInstance.data.datasets[0].data = actualCF;
+          chartInstance.data.datasets[1].data = predictedCF;
+          chartInstance.update();
+        });
+
+      }
 
 
   </script>
