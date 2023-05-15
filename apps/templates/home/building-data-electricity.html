@@ -1,6 +1,6 @@
 {% extends 'layouts/base.html' %}
 
-{% block title %} Details {% endblock title %}
+{% block title %} PP Electricity Details {% endblock title %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %} 
@@ -336,10 +336,13 @@
             borderWidth: 0,
             pointRadius: 0,
             borderColor: "#FFCF95 ",
+            backgroundColor: "#FFCF95",
             borderWidth: 3,
             fill: false,
             data: actualKwH,
-            maxBarThickness: 6
+            maxBarThickness: 16,
+            borderRadius: 100
+
           }
           ],
         },
