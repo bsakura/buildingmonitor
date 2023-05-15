@@ -1,0 +1,480 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Water Detail {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %} 
+
+
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+  <div class="min-height-300 bg-primary position-absolute w-100"></div>
+
+  {% include "includes/sidenav.html" %}
+
+  <main class="main-content position-relative border-radius-lg ">
+
+    {% include "includes/navigation.html" %}
+
+    <div class="container-fluid py-4">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="row">
+            <div class="col-xl-12 mb-xl-0 mb-4">
+              <div class="card z-index-2 h-200">
+                <div class="card-header pb-0 pt-3 bg-transparent d-flex align-items-center justify-content-between">
+                  <h6 class="text-capitalize mb-0">Water Prediction</h6>
+                  <div>
+                    <select name="year" id="year" class="form-control" onchange="updateChart()">
+                      <option value="2022">2022</option>
+                      <option value="2021">2021</option>
+                      <option value="2020">2020</option> 
+                    </select>
+                  </div>
+                </div>
+                <div class="card-body p-3">
+                  <div class="chart">
+                    <canvas id="chart-line-prediction" class="chart-canvas" height="220"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      
+      <div class="row ">
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mt-4 ">
+          <div class="card h-100 p-0 ">
+            <div id="carouselExampleCaptions" class="carousel slide h-100" data-bs-ride="carousel">
+              <div class="carousel-inner border-radius-lg h-100">
+                <div class="carousel-item h-100 active" style="background-image: url('{{ config.ASSETS_ROOT }}/img/carousel-2.jpg');
+                        background-size: cover;">
+                        <div class="numbers align-items-center d-flex justify-content-center flex-column">
+                            <p class="text-m text-white mb-0 text-uppercase font-weight-bold mt-4">water</p>
+                            <p class="text-m mb-0 text-white text-uppercase font-weight-bold">Usage</p>
+                            <h5 class="font-weight-bolder text-white text-xxl mt-4">
+                                500
+                            </h5>
+                            <p class="mb-0 text-white align-items-center mt-4">
+                                Liter
+                            </p>
+                            <img class="mt-4" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAABwUlEQVR4nO2Vv0rDUBSHjx1utKPQub26KT6Aow8g6ODspJtPINJkcHQQTYhU0EWQPoRNQMWhODRRXERx0KVLE4XeLEduS6u2tVJqa069H/wgcHPPPR8nfwAUCoVipEmtOSgDcQMddoEue0CHHaM7vooFLdOrABa0TG1vrUat1vnAG28e7mrYFoc9o6vl0dHW8SixgTbglxwn1tFhK+iyA3TYfacafyvQyBlDPBz72rxMbqy+1mUvxELgJNHefCNyLfYCNnTPMAS4FWJrlIAdowl046dHCIYB70Pg8/e/NTAs+CgK8B7ynUDH+83gjZvhXcYMc2kzXKAnYLXlamovnKMsgBkrqHKzskhWgEsJM4jSdmWerACv53Ymj4yyAKbNYIm0ALeCU9oCZnjzKwKD+pFN74ezXV9mK6zEWkDy0xSgV36lSJ/ncSVgEZ7AsOFK4I/h1CfwGaNUXZYBiuxc4oTuRY+6Hz1li5gEauh+lDX8CGV0L9oESmxfY0r3xeuHgAiyPk4CFXRPGI3mmxJ+tAVUMLzopoNACaige6LcJuCJMlDB8ITdKmD4wgIqZIuY1H2xa3jiRUZek/yUKhSKf8Q7X3BQAfcW+U4AAAAASUVORK5CYII=">
+                        </div>
+                    </div>
+
+                
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-5 mt-4">
+          <div class="card z-index-2 h-70">
+            <div class="card-header pb-0 pt-3 bg-transparent d-flex align-items-center justify-content-between">
+              <h6 class="text-capitalize">water</h6>
+              <p class="text-sm mb-0">
+                <select name= "yearwater" id="yearwater" class="form-control" onchange="updateChartwater()">
+                  <option value="2022">2022</option>
+                  <option value="2021">2021</option>
+                  <option value="2020">2020</option> 
+                </select>
+              </p>
+            </div>
+            <div class="card-body p-3">
+              <div class="chart">
+                <canvas id="chart-water" class="chart-canvas" height="270"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 mt-4">
+          <div class="card  h-70">
+            <div class="card-header pb-0 pt-3 bg-transparent d-flex align-items-center justify-content-between">
+              <h6 class="text-capitalize">Usage History</h6>
+            </div>
+          <div class="card-body px-0 pt-0 pb-2">
+            <div class="table-responsive"></div>
+          </div>
+          </div>
+
+                      
+
+        </div>
+
+      </div>
+
+
+    
+     
+
+      {% include "includes/footer.html" %}
+
+    </div>
+
+  </main> 
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+  
+  <script src="{{ config.ASSETS_ROOT }}/js/plugins/chartjs.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/json2/20160511/json2.min.js"></script>
+
+  <script>
+  function formatDate(dateString) {
+    const options = { month: 'long', year: 'numeric' };
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', options);
+  }
+  const buildingValues = ['CRCS', 'CAS', 'Energi', 'Kimia', 'PP', 'PAU', 'CADL', 'TI', 'Mesin', 'LabtekX', 'LabtekXI', 'TPB', 'CampusCenter', 'AulaBarat', 'AulaTimur', 'CIBE', 'Konversi', 'Fisi', 'LabtekIXBC', 'STT', 'TL', 'LabtekV', 'LabtekVI', 'LabtekVII', 'LabtekVIII', 'Sabuga'];
+  const url = window.location.href;
+  console.log("url:",url);
+  const buildingValuez = url.substring(url.lastIndexOf('=') + 1).replace('#', '');
+
+  console.log("bv", buildingValuez);
+
+  const buildingValuezz = buildingValues.indexOf(buildingValuez)+1;
+  console.log("bvz", buildingValuezz);
+  const tableContainer = document.querySelector(".table-responsive");
+
+  
+  const waterTable = document.createElement("table");
+  waterTable.className = "table align-items-center mb-0";
+
+  const waterTableHead = document.createElement("thead");
+  const waterTableHeadRow = document.createElement("tr");
+
+  const dateHeader = document.createElement("th");
+  dateHeader.textContent = "Date";
+  dateHeader.className =
+    "text-uppercase text-secondary text-sm font-weight-bolder opacity-7 align-items-center";
+
+  const usageHeader = document.createElement("th");
+  usageHeader.textContent = "Usage";
+  usageHeader.className =
+    "text-uppercase text-secondary text-sm font-weight-bolder opacity-7 align-items-center";
+
+  waterTableHeadRow.appendChild(dateHeader);
+  waterTableHeadRow.appendChild(usageHeader);
+  waterTableHead.appendChild(waterTableHeadRow);
+
+  const waterTableBody = document.createElement("tbody");
+  waterTable.appendChild(waterTableHead);
+  waterTable.appendChild(waterTableBody);
+  tableContainer.appendChild(waterTable);
+
+  const waterPromise = fetch(`/water_usage/${buildingValuezz}`)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("data", data);
+      data.slice(-5).forEach((data) => {
+        const dateCell = document.createElement("td");
+        const formattedDate = formatDate(data.date);
+        dateCell.innerHTML = `<div class="justify-content-center align-items-center"><h6 class="text-s text-secondary">${formattedDate}</h6></div>`;
+
+        const usageCell = document.createElement("td");
+        usageCell.className = "justify-content-center align-items-center";
+        usageCell.innerHTML = `<h6 class="text-s text-secondary">${data.water_usage} Liter</h6>`;
+
+        const row = document.createElement("tr");
+        row.appendChild(dateCell);
+        row.appendChild(usageCell);
+
+        waterTableBody.appendChild(row);
+      });
+    });
+
+
+  const params = new URLSearchParams(window.location.search);
+  const buildingValue = params.get('building');
+  const yearValue = "2022";
+  var ctx1 = document.getElementById("chart-line-prediction").getContext("2d");
+
+  fetch(`/building-data/${buildingValue}`)
+    .then((response) => response.json())
+    .then((data) => {
+      const dataArray = Object.entries(data);
+
+      const filteredDataActual = dataArray[2][1].map((d) => {
+          return { Date: d.Date, Actual: d[buildingValue] };
+      }).filter((d) => {
+          return new Date(d.Date).getFullYear() == yearValue;
+      });
+
+      const filteredDataPredicted = dataArray[5][1].map((d) => {
+          return { Date: d.Date, Predicted: d[buildingValue] };
+      }).filter((d) => {
+          return new Date(d.Date).getFullYear() == yearValue;
+      });
+      const predictedEl = filteredDataPredicted.map((d) => d.Predicted);
+      const actualEl = filteredDataActual.map((d) => d.Actual);
+      
+
+      // Create the chart using the retrieved predictedLiter and actualLiter data
+      new Chart(ctx1, {
+        type: "line",
+        data: {
+          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+          datasets: [{
+            label: "Actual",
+            tension: 0.4,
+            borderWidth: 0,
+            pointRadius: 0,
+            borderColor: "#FFCF95",
+            borderWidth: 3,
+            fill: false,
+            data: actualEl,
+            maxBarThickness: 6
+          },
+          {
+            label: "Prediction",
+            tension: 0.4,
+            borderWidth: 0,
+            pointRadius: 0,
+            borderColor: "#ccc",
+            borderWidth: 3,
+            borderDash: [5, 5],
+            fill: false,
+            data: predictedEl,
+            maxBarThickness: 6
+          }
+          ],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: false,
+              }
+            },
+            interaction: {
+              intersect: false,
+              mode: 'index',
+            },
+            scales: {
+              y: {
+                grid: {
+                  drawBorder: false,
+                  display: true,
+                  drawOnChartArea: true,
+                  drawTicks: false,
+                  borderDash: [5, 5]
+                },
+                ticks: {
+                  display: true,
+                  padding: 10,
+                  font: {
+                    size: 11,
+                    family: "Open Sans",
+                    style: 'normal',
+                    lineHeight: 2
+                  },
+                }
+              },
+              x: {
+                grid: {
+                  drawBorder: false,
+                  display: false,
+                  drawOnChartArea: false,
+                  drawTicks: false,
+                  borderDash: [5, 5]
+                },
+                ticks: {
+                  display: true,
+                  color: '#ccc',
+                  padding: 20,
+                  font: {
+                    size: 11,
+                    family: "Open Sans",
+                    style: 'normal',
+                    lineHeight: 2
+                  },
+                }
+              },
+            },
+          },
+        });
+    });
+
+
+  var ctx2 = document.getElementById("chart-water").getContext("2d");
+  fetch(`/building-data/${buildingValue}`)
+    .then((response) => response.json())
+    .then((data) => {
+      const dataArray = Object.entries(data);
+      
+      const filteredDataActual = dataArray[2][1].map((d) => {
+          return { Date: d.Date, Actual: d[buildingValue] };
+      }).filter((d) => {
+          return new Date(d.Date).getFullYear() == yearValue;
+      });
+
+      const filteredDataPredicted = dataArray[5][1].map((d) => {
+          return { Date: d.Date, Predicted: d[buildingValue] };
+      }).filter((d) => {
+          return new Date(d.Date).getFullYear() == yearValue;
+      });
+      const predictedLiter = filteredDataPredicted.map((d) => d.Predicted);
+      const actualLiter = filteredDataActual.map((d) => d.Actual);
+
+      // Create the chart using the retrieved predictedLiter and actualLiter data
+      new Chart(ctx2, {
+        type: "bar",
+        data: {
+          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+          datasets: [{
+            label: "Actual",
+            tension: 0.4,
+            borderWidth: 0,
+            pointRadius: 0,
+            borderColor: "#FFCF95 ",
+            borderWidth: 3,
+            fill: false,
+            data: actualLiter,
+            maxBarThickness: 6
+          }
+          ],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: false,
+              }
+            },
+            interaction: {
+              intersect: false,
+              mode: 'index',
+            },
+            scales: {
+              y: {
+                grid: {
+                  drawBorder: false,
+                  display: true,
+                  drawOnChartArea: true,
+                  drawTicks: false,
+                  borderDash: [5, 5]
+                },
+                ticks: {
+                  display: true,
+                  padding: 10,
+                  font: {
+                    size: 11,
+                    family: "Open Sans",
+                    style: 'normal',
+                    lineHeight: 2
+                  },
+                }
+              },
+              x: {
+                grid: {
+                  drawBorder: false,
+                  display: false,
+                  drawOnChartArea: false,
+                  drawTicks: false,
+                  borderDash: [5, 5]
+                },
+                ticks: {
+                  display: true,
+                  color: '#ccc',
+                  padding: 20,
+                  font: {
+                    size: 11,
+                    family: "Open Sans",
+                    style: 'normal',
+                    lineHeight: 2
+                  },
+                }
+              },
+            },
+          },
+        });
+    });
+
+    function updateChart() {
+        const yearValue = document.getElementById("year").value;
+        const params = new URLSearchParams(window.location.search);
+        const buildingValue = params.get('building');
+        // get the existing Chart instance
+        const chartInstance = Chart.instances[0];
+
+        // fetch the data from the server
+        fetch(`/building-data/${buildingValue}`)
+        .then((response) => response.json())
+        .then((data) => {
+          // convert the dictionary to an array of key-value pairs
+          const dataArray = Object.entries(data);
+          console.log(dataArray)
+
+          const filteredDataActual = dataArray[2][1].map((d) => {
+              return { Date: d.Date, Actual: d[buildingValue] };
+          }).filter((d) => {
+              return new Date(d.Date).getFullYear() == yearValue;
+          });
+          console.log(filteredDataActual)
+
+          const filteredDataPredicted = dataArray[5][1].map((d) => {
+              return { Date: d.Date, Predicted: d[buildingValue] };
+          }).filter((d) => {
+              return new Date(d.Date).getFullYear() == yearValue;
+          });
+          console.log("filtered",filteredDataPredicted)
+          const predictedCF = filteredDataPredicted.map((d) => d.Predicted);
+          const actualCF = filteredDataActual.map((d) => d.Actual);
+          console.log("actualCF", actualCF)
+
+          console.log("predictedCF", predictedCF)
+          
+          
+          chartInstance.data.datasets[0].data = actualCF;
+          chartInstance.data.datasets[1].data = predictedCF;
+          chartInstance.update();
+        });
+
+      }
+
+  
+    
+      function updateChartwater() {
+        const yearValue = document.getElementById("yearwater").value;
+        const params = new URLSearchParams(window.location.search);
+        const buildingValue = params.get('building');
+        // get the existing Chart instance
+        const chartInstance = Chart.instances[1];
+
+        // fetch the data from the server
+        fetch(`/building-data/${buildingValue}`)
+        .then((response) => response.json())
+        .then((data) => {
+          // convert the dictionary to an array of key-value pairs
+          const dataArray = Object.entries(data);
+
+          const filteredDataActual = dataArray[2][1].map((d) => {
+              return { Date: d.Date, Actual: d[buildingValue] };
+          }).filter((d) => {
+              return new Date(d.Date).getFullYear() == yearValue;
+          });
+
+          const actualCF = filteredDataActual.map((d) => d.Actual);
+
+          
+          
+          chartInstance.data.datasets[0].data = actualCF;
+          chartInstance.update();
+        });
+
+      }
+
+
+  </script>
+
+{% endblock javascripts %}

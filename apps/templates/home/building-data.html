@@ -1,9 +1,62 @@
 {% extends 'layouts/base.html' %}
 
-{% block title %} Billing {% endblock title %}
+{% block title %} Details {% endblock title %}
 
 <!-- Specific CSS goes HERE -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block stylesheets %} 
+<style>
+  .card-height {
+  height: 310px;
+}
+
+.circle-percentage {
+  width: 200px;
+  height: 200px;
+  position: relative;
+  border-radius: 50%;
+  margin: 0 auto;
+}
+
+.progresscir {
+  width: 80%;
+  height: 80%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  background-color: transparent;
+  border: 15px solid #FFCF95;
+  border-top-color: transparent;
+  transform: translate(-50%, -50%) rotate(-135deg);
+  box-sizing: border-box;
+}
+
+.progresscir-text {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.percentage {
+  font-size: 34px;
+  font-weight: bolder;
+  color: #333;
+}
+
+</style>
+
+
+
+
+
+
+{% endblock stylesheets %}
 
 {% block content %}
 
@@ -21,13 +74,15 @@
           <div class="row">
             <div class="col-xl-12 mb-xl-0 mb-4">
               <div class="card z-index-2 h-200">
-                <div class="card-header pb-0 pt-3 bg-transparent">
-                  <h6 class="text-capitalize">Carbon Footprint</h6>
-                  <select name= "year" id="year" onchange="updateChart()">
-                    <option value="2022">2022</option>
-                    <option value="2021">2021</option>
-                    <option value="2020">2020</option> 
-                  </select>
+                <div class="card-header pb-0 pt-3 bg-transparent d-flex align-items-center justify-content-between">
+                  <h6 class="text-capitalize mb-0">Carbon Footprint</h6>
+                  <div>
+                    <select name="year" id="year" class="form-control" onchange="updateChart()">
+                      <option value="2022">2022</option>
+                      <option value="2021">2021</option>
+                      <option value="2020">2020</option> 
+                    </select>
+                  </div>
                 </div>
                 <div class="card-body p-3">
                   <div class="chart">
@@ -37,203 +92,235 @@
               </div>
             </div>
           </div>
+          <div class="row ">
+            <div class="col-lg-6 mt-4">
+              <div class="card z-index-2 h-70">
+                <div class="card-header pb-0 pt-3 bg-transparent d-flex align-items-center justify-content-between">
+                  <h6 class="text-capitalize">Electricity</h6>
+                  <p class="text-sm mb-0">
+                    <select name= "yearelectricity" id="yearelectricity" class="form-control" onchange="updateChartElectricity()">
+                      <option value="2022">2022</option>
+                      <option value="2021">2021</option>
+                      <option value="2020">2020</option> 
+                    </select>
+                  </p>
+                </div>
+                <div class="card-body p-3">
+                  <div class="chart">
+                    <canvas id="chart-electricity" class="chart-canvas" height="190"></canvas>
+                  </div>
+                  <div>
+                    <a href="#" id="view-data-btn" class="btn btn-primary form-control">View Data</a>
+    
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 mt-4">
+              <div class="card z-index-2 h-70">
+                <div class="card-header pb-0 pt-3 bg-transparent d-flex align-items-center justify-content-between">
+                  <h6 class="text-capitalize">Water</h6>
+                  <p class="text-sm mb-0">
+                    <select name= "yearwater" id="yearwater" class="form-control" onchange="updateChartWater()">
+                      <option value="2022">2022</option>
+                      <option value="2021">2021</option>
+                      <option value="2020">2020</option> 
+                    </select>
+                  </p>
+                </div>
+                <div class="card-body p-3">
+                  <div class="chart">
+                    <canvas id="chart-water" class="chart-canvas" height="190"></canvas>
+                  </div>
+                  <div>
+                    <a href="#" id="view-data-water-btn" class="btn btn-primary form-control">View Data</a>
+    
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="col-lg-4">
-          <div class="card mb-4">
-            <div class="card-header pb-0">
+          <div class="card card-height">
+            <div class="card-header text-center pb-0">
               <h6>LEED Assessment</h6>
             </div>
             <div class="card-body px-0 pt-0 pb-2">
-              <div class="table-responsive p-0">
-                <table class="table align-items-center justify-content-center mb-0">
-                  <thead>
-                    <tr>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Aspect</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Coverage</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <div class="d-flex px-2">
-                          
-                          <div class="my-auto">
-                            <h6 class="mb-0 text-sm">Location</h6>
-                          </div>
-                        </div>
-                      </td>
-                      
-                      <td class="align-middle text-center">
-                        <div class="d-flex align-items-center justify-content-center">
-                          <span class="me-2 text-xs font-weight-bold">60%</span>
-                          <div>
-                            <div class="progress">
-                              <div class="progress-bar bg-gradient-info" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div>
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-    
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="d-flex px-2">
-                          
-                          <div class="my-auto">
-                            <h6 class="mb-0 text-sm">Sustainability</h6>
-                          </div>
-                        </div>
-                      </td>
-
-                      <td class="align-middle text-center">
-                        <div class="d-flex align-items-center justify-content-center">
-                          <span class="me-2 text-xs font-weight-bold">100%</span>
-                          <div>
-                            <div class="progress">
-                              <div class="progress-bar bg-gradient-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="d-flex px-2">
-
-                          <div class="my-auto">
-                            <h6 class="mb-0 text-sm">Water efficiency</h6>
-                          </div>
-                        </div>
-                      </td>
-                      
-                      <td class="align-middle text-center">
-                        <div class="d-flex align-items-center justify-content-center">
-                          <span class="me-2 text-xs font-weight-bold">30%</span>
-                          <div>
-                            <div class="progress">
-                              <div class="progress-bar bg-gradient-danger" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="30" style="width: 30%;"></div>
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                      
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="d-flex px-2">
-
-                          <div class="my-auto">
-                            <h6 class="mb-0 text-sm">Energy</h6>
-                          </div>
-                        </div>
-                      </td>
-
-                      <td class="align-middle text-center">
-                        <div class="d-flex align-items-center justify-content-center">
-                          <span class="me-2 text-xs font-weight-bold">0%</span>
-                          <div>
-                            <div class="progress">
-                              <div class="progress-bar bg-gradient-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="0" style="width: 0%;"></div>
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="d-flex px-2">
-
-                          <div class="my-auto">
-                            <h6 class="mb-0 text-sm">Material</h6>
-                          </div>
-                        </div>
-                      </td>
-
-                      <td class="align-middle text-center">
-                        <div class="d-flex align-items-center justify-content-center">
-                          <span class="me-2 text-xs font-weight-bold">80%</span>
-                          <div>
-                            <div class="progress">
-                              <div class="progress-bar bg-gradient-info" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="80" style="width: 80%;"></div>
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="d-flex px-2">
-
-                          <div class="my-auto">
-                            <h6 class="mb-0 text-sm">Indoor</h6>
-                          </div>
-                        </div>
-                      </td>
-                      
-                      <td class="align-middle text-center">
-                        <div class="d-flex align-items-center justify-content-center">
-                          <span class="me-2 text-xs font-weight-bold">100%</span>
-                          <div>
-                            <div class="progress">
-                              <div class="progress-bar bg-gradient-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-
-                    </tr>
-                  </tbody>
-                </table>
+              <div class="circle-percentage">
+                <div class="progresscir"></div>
+                <div class="progresscir-text text-center">
+                  <span class="percentage">75%</span>
+                  <p class="text-secondary">Platinum</p>
+                </div>
               </div>
             </div>
           </div>
+          
+          
+          
+          
+          <div class="card mt-4">
+            <div class="card-header text-center pb-0">
+              <h6>Scoring</h6>
+            </div>
+
+              <div class="card-body px-0 pt-0 pb-2">
+                <div class="table-responsive p-0">
+                  <table class="table align-items-center justify-content-center mb-0">
+                    <thead>
+                      <tr>
+                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Aspect</th>
+                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Coverage</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <div class="d-flex px-2">
+                            
+                            <div class="my-auto">
+                              <h6 class="mb-0 text-sm">Location</h6>
+                            </div>
+                          </div>
+                        </td>
+                        
+                        <td class="align-middle text-center">
+                          <div class="d-flex align-items-center justify-content-center">
+                            <span class="me-2 text-xs font-weight-bold">60%</span>
+                            <div>
+                              <div class="progress">
+                                <div class="progress-bar bg-gradient-primary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+      
+                      </tr>
+                      <tr>
+                        <td>
+                          <div class="d-flex px-2">
+                            
+                            <div class="my-auto">
+                              <h6 class="mb-0 text-sm">Sustainability</h6>
+                            </div>
+                          </div>
+                        </td>
+
+                        <td class="align-middle text-center">
+                          <div class="d-flex align-items-center justify-content-center">
+                            <span class="me-2 text-xs font-weight-bold">100%</span>
+                            <div>
+                              <div class="progress">
+                                <div class="progress-bar bg-gradient-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+
+                      </tr>
+                      <tr>
+                        <td>
+                          <div class="d-flex px-2">
+
+                            <div class="my-auto">
+                              <h6 class="mb-0 text-sm">Water efficiency</h6>
+                            </div>
+                          </div>
+                        </td>
+                        
+                        <td class="align-middle text-center">
+                          <div class="d-flex align-items-center justify-content-center">
+                            <span class="me-2 text-xs font-weight-bold">30%</span>
+                            <div>
+                              <div class="progress">
+                                <div class="progress-bar bg-gradient-danger" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="30" style="width: 30%;"></div>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        
+                      </tr>
+                      <tr>
+                        <td>
+                          <div class="d-flex px-2">
+
+                            <div class="my-auto">
+                              <h6 class="mb-0 text-sm">Energy</h6>
+                            </div>
+                          </div>
+                        </td>
+
+                        <td class="align-middle text-center">
+                          <div class="d-flex align-items-center justify-content-center">
+                            <span class="me-2 text-xs font-weight-bold">0%</span>
+                            <div>
+                              <div class="progress">
+                                <div class="progress-bar bg-gradient-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="0" style="width: 0%;"></div>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+
+                      </tr>
+                      <tr>
+                        <td>
+                          <div class="d-flex px-2">
+
+                            <div class="my-auto">
+                              <h6 class="mb-0 text-sm">Material</h6>
+                            </div>
+                          </div>
+                        </td>
+
+                        <td class="align-middle text-center">
+                          <div class="d-flex align-items-center justify-content-center">
+                            <span class="me-2 text-xs font-weight-bold">80%</span>
+                            <div>
+                              <div class="progress">
+                                <div class="progress-bar bg-gradient-primary" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="80" style="width: 80%;"></div>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+
+                      </tr>
+                      <tr>
+                        <td>
+                          <div class="d-flex px-2">
+
+                            <div class="my-auto">
+                              <h6 class="mb-0 text-sm">Indoor</h6>
+                            </div>
+                          </div>
+                        </td>
+                        
+                        <td class="align-middle text-center">
+                          <div class="d-flex align-items-center justify-content-center">
+                            <span class="me-2 text-xs font-weight-bold">100%</span>
+                            <div>
+                              <div class="progress">
+                                <div class="progress-bar bg-gradient-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+          </div>
+          </div>
+          </div>
+        </div>
+        
         </div>
       </div>
       
-      <div class="row ">
-        <div class="col-lg-6 mt-4">
-          <div class="card z-index-2 h-70">
-            <div class="card-header pb-0 pt-3 bg-transparent">
-              <h6 class="text-capitalize">Electricity</h6>
-              <p class="text-sm mb-0">
-                <select name= "yearelectricity" id="yearelectricity" onchange="updateChartElectricity()">
-                  <option value="2022">2022</option>
-                  <option value="2021">2021</option>
-                  <option value="2020">2020</option> 
-                </select>
-              </p>
-            </div>
-            <div class="card-body p-3">
-              <div class="chart">
-                <canvas id="chart-electricity" class="chart-canvas" height="120"></canvas>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-6 mt-4">
-          <div class="card z-index-2 h-70">
-            <div class="card-header pb-0 pt-3 bg-transparent">
-              <h6 class="text-capitalize">Water</h6>
-              <p class="text-sm mb-0">
-                <select name= "yearwater" id="yearwater" onchange="updateChartWater()">
-                  <option value="2022">2022</option>
-                  <option value="2021">2021</option>
-                  <option value="2020">2020</option> 
-                </select>
-              </p>
-            </div>
-            <div class="card-body p-3">
-              <div class="chart">
-                <canvas id="chart-water" class="chart-canvas" height="120"></canvas>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+
 
 
     
@@ -257,6 +344,15 @@
   <script>
   const params = new URLSearchParams(window.location.search);
   const buildingValue = params.get('building');
+  const url = window.location.href;
+  const buildingValuez = url.substring(url.lastIndexOf('=') + 1);
+
+  // Set the href attribute of the link
+  const viewDataBtn = document.getElementById('view-data-btn');
+  viewDataBtn.href = `building-data-electricity.html?building=${buildingValuez}`;
+  const viewDataBtnWtr = document.getElementById('view-data-water-btn');
+  viewDataBtnWtr.href = `building-data-water.html?building=${buildingValuez}`;
+
   const yearValue = "2022";
   var ctx1 = document.getElementById("chart-line-carbon-footprint").getContext("2d");
 
@@ -286,15 +382,14 @@
       new Chart(ctx1, {
         type: "line",
         data: {
-          labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
           datasets: [{
             label: "Actual",
             tension: 0.4,
             borderWidth: 0,
             pointRadius: 0,
-            borderColor: "#FCA5F1",
+            borderColor: "#BCDA9E",
             borderWidth: 3,
-            fill: false,
             data: actualCF,
             maxBarThickness: 6
           },
@@ -313,61 +408,60 @@
           ],
         },
         options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              display: false,
-            }
-          },
-          interaction: {
-            intersect: false,
-            mode: 'index',
-          },
-          scales: {
-            y: {
-              grid: {
-                drawBorder: false,
-                display: true,
-                drawOnChartArea: true,
-                drawTicks: false,
-                borderDash: [5, 5]
-              },
-              ticks: {
-                display: true,
-                padding: 10,
-                color: '#fbfbfb',
-                font: {
-                  size: 11,
-                  family: "Open Sans",
-                  style: 'normal',
-                  lineHeight: 2
-                },
-              }
-            },
-            x: {
-              grid: {
-                drawBorder: false,
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
                 display: false,
-                drawOnChartArea: false,
-                drawTicks: false,
-                borderDash: [5, 5]
-              },
-              ticks: {
-                display: true,
-                color: '#ccc',
-                padding: 20,
-                font: {
-                  size: 11,
-                  family: "Open Sans",
-                  style: 'normal',
-                  lineHeight: 2
-                },
               }
             },
+            interaction: {
+              intersect: false,
+              mode: 'index',
+            },
+            scales: {
+              y: {
+                grid: {
+                  drawBorder: false,
+                  display: true,
+                  drawOnChartArea: true,
+                  drawTicks: false,
+                  borderDash: [5, 5]
+                },
+                ticks: {
+                  display: true,
+                  padding: 10,
+                  font: {
+                    size: 11,
+                    family: "Open Sans",
+                    style: 'normal',
+                    lineHeight: 2
+                  },
+                }
+              },
+              x: {
+                grid: {
+                  drawBorder: false,
+                  display: false,
+                  drawOnChartArea: false,
+                  drawTicks: false,
+                  borderDash: [5, 5]
+                },
+                ticks: {
+                  display: true,
+                  color: '#ccc',
+                  padding: 20,
+                  font: {
+                    size: 11,
+                    family: "Open Sans",
+                    style: 'normal',
+                    lineHeight: 2
+                  },
+                }
+              },
+            },
           },
-        },
-      });
+        });
     });
 
 
@@ -395,9 +489,9 @@
 
       // Create the chart using the retrieved predictedKwh and actualKwh data
       new Chart(ctx2, {
-        type: "line",
+        type: "bar",
         data: {
-          labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
           datasets: [{
             label: "Actual",
             tension: 0.4,
@@ -407,78 +501,67 @@
             borderWidth: 3,
             fill: false,
             data: actualKwH,
-            maxBarThickness: 6
-          },
-          {
-            label: "Prediction",
-            tension: 0.4,
-            borderWidth: 0,
-            pointRadius: 0,
-            borderColor: "#ccc",
-            borderWidth: 3,
-            borderDash: [5, 5],
-            fill: false,
-            data: predictedKwH,
-            maxBarThickness: 6
+            maxBarThickness: 6,
+          borderRadius: 100
+
           }
           ],
         },
         options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              display: false,
-            }
-          },
-          interaction: {
-            intersect: false,
-            mode: 'index',
-          },
-          scales: {
-            y: {
-              grid: {
-                drawBorder: false,
-                display: true,
-                drawOnChartArea: true,
-                drawTicks: false,
-                borderDash: [5, 5]
-              },
-              ticks: {
-                display: true,
-                padding: 10,
-                color: '#fbfbfb',
-                font: {
-                  size: 11,
-                  family: "Open Sans",
-                  style: 'normal',
-                  lineHeight: 2
-                },
-              }
-            },
-            x: {
-              grid: {
-                drawBorder: false,
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
                 display: false,
-                drawOnChartArea: false,
-                drawTicks: false,
-                borderDash: [5, 5]
-              },
-              ticks: {
-                display: true,
-                color: '#ccc',
-                padding: 20,
-                font: {
-                  size: 11,
-                  family: "Open Sans",
-                  style: 'normal',
-                  lineHeight: 2
-                },
               }
             },
+            interaction: {
+              intersect: false,
+              mode: 'index',
+            },
+            scales: {
+              y: {
+                grid: {
+                  drawBorder: false,
+                  display: true,
+                  drawOnChartArea: true,
+                  drawTicks: false,
+                  borderDash: [5, 5]
+                },
+                ticks: {
+                  display: true,
+                  padding: 10,
+                  font: {
+                    size: 11,
+                    family: "Open Sans",
+                    style: 'normal',
+                    lineHeight: 2
+                  },
+                }
+              },
+              x: {
+                grid: {
+                  drawBorder: false,
+                  display: false,
+                  drawOnChartArea: false,
+                  drawTicks: false,
+                  borderDash: [5, 5]
+                },
+                ticks: {
+                  display: true,
+                  color: '#ccc',
+                  padding: 20,
+                  font: {
+                    size: 11,
+                    family: "Open Sans",
+                    style: 'normal',
+                    lineHeight: 2
+                  },
+                }
+              },
+            },
           },
-        },
-      });
+        });
     });
 
 
@@ -508,31 +591,21 @@
 
         // Create the chart using the retrieved predictedKwh and actualKwh data
         new Chart(ctx3, {
-          type: "line",
+          type: "bar",
           data: {
-            labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
             datasets: [{
               label: "Actual",
               tension: 0.4,
               borderWidth: 0,
               pointRadius: 0,
-              borderColor: "#5e72e4",
+              borderColor: "#CAE5FC",
+              backgroundColor: "#CAE5FC",
               borderWidth: 3,
               fill: false,
               data: actualLiter,
-              maxBarThickness: 6
-            },
-            {
-              label: "Prediction",
-              tension: 0.4,
-              borderWidth: 0,
-              pointRadius: 0,
-              borderColor: "#ccc",
-              borderWidth: 3,
-              borderDash: [5, 5],
-              fill: false,
-              data: predictedLiter,
-              maxBarThickness: 6
+              maxBarThickness: 6,
+              borderRadius: 100
             }
             ],
           },
@@ -560,7 +633,6 @@
                 ticks: {
                   display: true,
                   padding: 10,
-                  color: '#fbfbfb',
                   font: {
                     size: 11,
                     family: "Open Sans",
@@ -671,7 +743,6 @@
           
           
           chartInstance.data.datasets[0].data = actualCF;
-          chartInstance.data.datasets[1].data = predictedCF;
           chartInstance.update();
         });
 
@@ -713,7 +784,6 @@
           
           
           chartInstance.data.datasets[0].data = actualCF;
-          chartInstance.data.datasets[1].data = predictedCF;
           chartInstance.update();
         });
 

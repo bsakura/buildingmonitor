@@ -1,0 +1,480 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Details {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %} 
+
+
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+  <div class="min-height-300 bg-primary position-absolute w-100"></div>
+
+  {% include "includes/sidenav.html" %}
+
+  <main class="main-content position-relative border-radius-lg ">
+
+    {% include "includes/navigation.html" %}
+
+    <div class="container-fluid py-4">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="row">
+            <div class="col-xl-12 mb-xl-0 mb-4">
+              <div class="card z-index-2 h-200">
+                <div class="card-header pb-0 pt-3 bg-transparent d-flex align-items-center justify-content-between">
+                  <h6 class="text-capitalize mb-0">Electricity Prediction</h6>
+                  <div>
+                    <select name="year" id="year" class="form-control" onchange="updateChart()">
+                      <option value="2022">2022</option>
+                      <option value="2021">2021</option>
+                      <option value="2020">2020</option> 
+                    </select>
+                  </div>
+                </div>
+                <div class="card-body p-3">
+                  <div class="chart">
+                    <canvas id="chart-line-prediction" class="chart-canvas" height="220"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      
+      <div class="row ">
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mt-4 ">
+          <div class="card h-100 p-0 ">
+            <div id="carouselExampleCaptions" class="carousel slide h-100" data-bs-ride="carousel">
+              <div class="carousel-inner border-radius-lg h-100">
+                <div class="carousel-item h-100 active" style="background-image: url('{{ config.ASSETS_ROOT }}/img/carousel-1.jpg');
+                        background-size: cover;">
+                        <div class="numbers align-items-center d-flex justify-content-center flex-column">
+                            <p class="text-m text-white mb-0 text-uppercase font-weight-bold mt-4">Electricity</p>
+                            <p class="text-m mb-0 text-white text-uppercase font-weight-bold">Usage</p>
+                            <h5 class="font-weight-bolder text-white text-xxl mt-4">
+                                6500
+                            </h5>
+                            <p class="mb-0 text-white align-items-center mt-4">
+                                KwH
+                            </p>
+                            <img class="mt-4" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAADpUlEQVR4nO2X229MURjFN9q9p4oHCYlIiYQmSASJEILGA0+8uCYal4hr3YppS9EqMTWqFIlSISkSwT9ApN37MNObjpbB9JJUVNELOp4QzZIzx3R6M3Na+4zTZFbyJTP7XPb6nVnfNzmERBRRRFKEe2QYFMtiCHYOnJaC02Zw9lMr2gxBSyBYDoRlkXouMYvwjAwHp0cgaCsEg67itAWCpsFJYv6veSV6HTht0m28V9H34NFrwm8cZAgEyxy48V6VB5Ch4cs6Zw8kmocWK3Y/LBDgzC7dvOiEsBmfeaPMCz+EQT2hTgwI2mg8AG1SJ5t8AE7TDTcv/EXT5Dduf+b8v/8KzVL/7FDMEsL39NkfCMtCeQCc5eratGwc0LQe+LgRqJjQZX183+siaOVIBKClQTdTLMCbBcDXA4A3Rat2K1C3BKhNANoPdV+vXQI8iQ0VI4dMgJagm71bGTDYuBqoXwZ4rYE1tRpWaOX//mFDqEb+JBGA/Qi6mRoP1VTLVkCJ0dYqJ2nf23YBVVO7nJuondu6I1SEvssE+BZ0s5IxwOe9mrH6pT2OWwKf1Zj5YpQMlMeFiBDzygTwhGw69Yn7s+6e3fu4a4qWf/X4ixl6mviNPABBH+maHK/nagbVZq6Y2PcvpDa2rjFKH8oD4DRV5+gDGpZrRtt2BvpBHZ++Bl+rTSxd96JWeQBPoqfrBlDH45c/T9s5WlvzT56no3SaZ4BCp0kD8EFo77T6Nm9L6htA7/WClUs17wNQ6KrwAdCV8gFAhkKw52EAcBn2ZgYeNQeC/TIMgLMOFMfMM8R8v14pBw5gN9S8D6CYREHQYvkAtEi9t+EAPghH7FhwViMNgDMPlBFjwmK+E0JY4iBow78D0Ab1XmE1H4AYPs43NQYO8PK/me+EeEpGgtNb/Qegheq1xCy6ebcWPevabQ/yCtw4c7kamTkupJ4sx570EmxJVkDMptN51Th6phIHM8uwM9WBTfsUJCbxvxYxmxL7MLl5n4JdaU4cyChDuu0ZTl2oQm7+S+QXeswHYM0qQ4a9EtmXqnHx+isU3Pb0ilTXImbTjbs1Xr09sM3q+EXMprNX3EXptgokHy/F9hQHNu4Rf83/7iPORmI2Zee55m9JVjq69cB+BUmHnTh0ohzH7JWwXazC+atur/2aeyYxozLsz2emZD1+ey7fhYI7Nd3ilF9YDduFh68K7tVNJmZX/Ky5qfGz56FHZZDBpPjuEIPLfEQRkcGj3za/Yk6FI9nkAAAAAElFTkSuQmCC">
+                        </div>
+                    </div>
+
+                
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-5 mt-4">
+          <div class="card z-index-2 h-70">
+            <div class="card-header pb-0 pt-3 bg-transparent d-flex align-items-center justify-content-between">
+              <h6 class="text-capitalize">Electricity</h6>
+              <p class="text-sm mb-0">
+                <select name= "yearelectricity" id="yearelectricity" class="form-control" onchange="updateChartElectricity()">
+                  <option value="2022">2022</option>
+                  <option value="2021">2021</option>
+                  <option value="2020">2020</option> 
+                </select>
+              </p>
+            </div>
+            <div class="card-body p-3">
+              <div class="chart">
+                <canvas id="chart-electricity" class="chart-canvas" height="270"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 mt-4">
+          <div class="card  h-70">
+            <div class="card-header pb-0 pt-3 bg-transparent d-flex align-items-center justify-content-between">
+              <h6 class="text-capitalize">Usage History</h6>
+            </div>
+          <div class="card-body px-0 pt-0 pb-2">
+            <div class="table-responsive"></div>
+          </div>
+          </div>
+
+                      
+
+        </div>
+
+      </div>
+
+
+    
+     
+
+      {% include "includes/footer.html" %}
+
+    </div>
+
+  </main> 
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+  
+  <script src="{{ config.ASSETS_ROOT }}/js/plugins/chartjs.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/json2/20160511/json2.min.js"></script>
+
+  <script>
+  function formatDate(dateString) {
+    const options = { month: 'long', year: 'numeric' };
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', options);
+  }
+  const buildingValues = ['CRCS', 'CAS', 'Energi', 'Kimia', 'PP', 'PAU', 'CADL', 'TI', 'Mesin', 'LabtekX', 'LabtekXI', 'TPB', 'CampusCenter', 'AulaBarat', 'AulaTimur', 'CIBE', 'Konversi', 'Fisi', 'LabtekIXBC', 'STT', 'TL', 'LabtekV', 'LabtekVI', 'LabtekVII', 'LabtekVIII', 'Sabuga'];
+  const url = window.location.href;
+  console.log("url:",url);
+  const buildingValuez = url.substring(url.lastIndexOf('=') + 1).replace('#', '');
+
+  console.log("bv", buildingValuez);
+
+  const buildingValuezz = buildingValues.indexOf(buildingValuez)+1;
+  console.log("bvz", buildingValuezz);
+  const tableContainer = document.querySelector(".table-responsive");
+
+  
+  const electricityTable = document.createElement("table");
+  electricityTable.className = "table align-items-center mb-0";
+
+  const electricityTableHead = document.createElement("thead");
+  const electricityTableHeadRow = document.createElement("tr");
+
+  const dateHeader = document.createElement("th");
+  dateHeader.textContent = "Date";
+  dateHeader.className =
+    "text-uppercase text-secondary text-sm font-weight-bolder opacity-7 align-items-center";
+
+  const usageHeader = document.createElement("th");
+  usageHeader.textContent = "Usage";
+  usageHeader.className =
+    "text-uppercase text-secondary text-sm font-weight-bolder opacity-7 align-items-center";
+
+  electricityTableHeadRow.appendChild(dateHeader);
+  electricityTableHeadRow.appendChild(usageHeader);
+  electricityTableHead.appendChild(electricityTableHeadRow);
+
+  const electricityTableBody = document.createElement("tbody");
+  electricityTable.appendChild(electricityTableHead);
+  electricityTable.appendChild(electricityTableBody);
+  tableContainer.appendChild(electricityTable);
+
+  const electricityPromise = fetch(`/electricity_usage/${buildingValuezz}`)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("data", data);
+      data.slice(-5).forEach((data) => {
+        const dateCell = document.createElement("td");
+        const formattedDate = formatDate(data.date);
+        dateCell.innerHTML = `<div class="justify-content-center align-items-center"><h6 class="text-s text-secondary">${formattedDate}</h6></div>`;
+
+        const usageCell = document.createElement("td");
+        usageCell.className = "justify-content-center align-items-center";
+        usageCell.innerHTML = `<h6 class="text-s text-secondary">${data.electricity_usage} KwH</h6>`;
+
+        const row = document.createElement("tr");
+        row.appendChild(dateCell);
+        row.appendChild(usageCell);
+
+        electricityTableBody.appendChild(row);
+      });
+    });
+
+
+  const params = new URLSearchParams(window.location.search);
+  const buildingValue = params.get('building');
+  const yearValue = "2022";
+  var ctx1 = document.getElementById("chart-line-prediction").getContext("2d");
+
+  fetch(`/building-data/${buildingValue}`)
+    .then((response) => response.json())
+    .then((data) => {
+      const dataArray = Object.entries(data);
+
+      const filteredDataActual = dataArray[1][1].map((d) => {
+          return { Date: d.Date, Actual: d[buildingValue] };
+      }).filter((d) => {
+          return new Date(d.Date).getFullYear() == yearValue;
+      });
+
+      const filteredDataPredicted = dataArray[4][1].map((d) => {
+          return { Date: d.Date, Predicted: d[buildingValue] };
+      }).filter((d) => {
+          return new Date(d.Date).getFullYear() == yearValue;
+      });
+      const predictedEl = filteredDataPredicted.map((d) => d.Predicted);
+      const actualEl = filteredDataActual.map((d) => d.Actual);
+      
+
+      // Create the chart using the retrieved predictedKwh and actualKwh data
+      new Chart(ctx1, {
+        type: "line",
+        data: {
+          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+          datasets: [{
+            label: "Actual",
+            tension: 0.4,
+            borderWidth: 0,
+            pointRadius: 0,
+            borderColor: "#FFCF95",
+            borderWidth: 3,
+            fill: false,
+            data: actualEl,
+            maxBarThickness: 6
+          },
+          {
+            label: "Prediction",
+            tension: 0.4,
+            borderWidth: 0,
+            pointRadius: 0,
+            borderColor: "#ccc",
+            borderWidth: 3,
+            borderDash: [5, 5],
+            fill: false,
+            data: predictedEl,
+            maxBarThickness: 6
+          }
+          ],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: false,
+              }
+            },
+            interaction: {
+              intersect: false,
+              mode: 'index',
+            },
+            scales: {
+              y: {
+                grid: {
+                  drawBorder: false,
+                  display: true,
+                  drawOnChartArea: true,
+                  drawTicks: false,
+                  borderDash: [5, 5]
+                },
+                ticks: {
+                  display: true,
+                  padding: 10,
+                  font: {
+                    size: 11,
+                    family: "Open Sans",
+                    style: 'normal',
+                    lineHeight: 2
+                  },
+                }
+              },
+              x: {
+                grid: {
+                  drawBorder: false,
+                  display: false,
+                  drawOnChartArea: false,
+                  drawTicks: false,
+                  borderDash: [5, 5]
+                },
+                ticks: {
+                  display: true,
+                  color: '#ccc',
+                  padding: 20,
+                  font: {
+                    size: 11,
+                    family: "Open Sans",
+                    style: 'normal',
+                    lineHeight: 2
+                  },
+                }
+              },
+            },
+          },
+        });
+    });
+
+
+  var ctx2 = document.getElementById("chart-electricity").getContext("2d");
+  fetch(`/building-data/${buildingValue}`)
+    .then((response) => response.json())
+    .then((data) => {
+      const dataArray = Object.entries(data);
+      
+      const filteredDataActual = dataArray[1][1].map((d) => {
+          return { Date: d.Date, Actual: d[buildingValue] };
+      }).filter((d) => {
+          return new Date(d.Date).getFullYear() == yearValue;
+      });
+
+      const filteredDataPredicted = dataArray[4][1].map((d) => {
+          return { Date: d.Date, Predicted: d[buildingValue] };
+      }).filter((d) => {
+          return new Date(d.Date).getFullYear() == yearValue;
+      });
+      const predictedKwH = filteredDataPredicted.map((d) => d.Predicted);
+      const actualKwH = filteredDataActual.map((d) => d.Actual);
+
+      // Create the chart using the retrieved predictedKwh and actualKwh data
+      new Chart(ctx2, {
+        type: "bar",
+        data: {
+          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+          datasets: [{
+            label: "Actual",
+            tension: 0.4,
+            borderWidth: 0,
+            pointRadius: 0,
+            borderColor: "#FFCF95 ",
+            borderWidth: 3,
+            fill: false,
+            data: actualKwH,
+            maxBarThickness: 6
+          }
+          ],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: false,
+              }
+            },
+            interaction: {
+              intersect: false,
+              mode: 'index',
+            },
+            scales: {
+              y: {
+                grid: {
+                  drawBorder: false,
+                  display: true,
+                  drawOnChartArea: true,
+                  drawTicks: false,
+                  borderDash: [5, 5]
+                },
+                ticks: {
+                  display: true,
+                  padding: 10,
+                  font: {
+                    size: 11,
+                    family: "Open Sans",
+                    style: 'normal',
+                    lineHeight: 2
+                  },
+                }
+              },
+              x: {
+                grid: {
+                  drawBorder: false,
+                  display: false,
+                  drawOnChartArea: false,
+                  drawTicks: false,
+                  borderDash: [5, 5]
+                },
+                ticks: {
+                  display: true,
+                  color: '#ccc',
+                  padding: 20,
+                  font: {
+                    size: 11,
+                    family: "Open Sans",
+                    style: 'normal',
+                    lineHeight: 2
+                  },
+                }
+              },
+            },
+          },
+        });
+    });
+
+    function updateChart() {
+        const yearValue = document.getElementById("year").value;
+        const params = new URLSearchParams(window.location.search);
+        const buildingValue = params.get('building');
+        // get the existing Chart instance
+        const chartInstance = Chart.instances[0];
+
+        // fetch the data from the server
+        fetch(`/building-data/${buildingValue}`)
+        .then((response) => response.json())
+        .then((data) => {
+          // convert the dictionary to an array of key-value pairs
+          const dataArray = Object.entries(data);
+          console.log(dataArray)
+
+          const filteredDataActual = dataArray[0][1].map((d) => {
+              return { Date: d.Date, Actual: d[buildingValue] };
+          }).filter((d) => {
+              return new Date(d.Date).getFullYear() == yearValue;
+          });
+          console.log(filteredDataActual)
+
+          const filteredDataPredicted = dataArray[3][1].map((d) => {
+              return { Date: d.Date, Predicted: d[buildingValue] };
+          }).filter((d) => {
+              return new Date(d.Date).getFullYear() == yearValue;
+          });
+          console.log("filtered",filteredDataPredicted)
+          const predictedCF = filteredDataPredicted.map((d) => d.Predicted);
+          const actualCF = filteredDataActual.map((d) => d.Actual);
+          console.log("actualCF", actualCF)
+
+          console.log("predictedCF", predictedCF)
+          
+          
+          chartInstance.data.datasets[0].data = actualCF;
+          chartInstance.data.datasets[1].data = predictedCF;
+          chartInstance.update();
+        });
+
+      }
+
+  
+    
+      function updateChartElectricity() {
+        const yearValue = document.getElementById("yearelectricity").value;
+        const params = new URLSearchParams(window.location.search);
+        const buildingValue = params.get('building');
+        // get the existing Chart instance
+        const chartInstance = Chart.instances[1];
+
+        // fetch the data from the server
+        fetch(`/building-data/${buildingValue}`)
+        .then((response) => response.json())
+        .then((data) => {
+          // convert the dictionary to an array of key-value pairs
+          const dataArray = Object.entries(data);
+
+          const filteredDataActual = dataArray[1][1].map((d) => {
+              return { Date: d.Date, Actual: d[buildingValue] };
+          }).filter((d) => {
+              return new Date(d.Date).getFullYear() == yearValue;
+          });
+
+          const actualCF = filteredDataActual.map((d) => d.Actual);
+
+          
+          
+          chartInstance.data.datasets[0].data = actualCF;
+          chartInstance.update();
+        });
+
+      }
+
+
+  </script>
+
+{% endblock javascripts %}

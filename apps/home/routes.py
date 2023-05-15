@@ -153,8 +153,33 @@ def submit_water():
 
 @blueprint.route('/electricity_usage/<int:building_id>')
 def show_electricity_usage_for_building(building_id):
-    electricity_usage = Electricity.query.filter_by(building_id=building_id).all()
-    return render_template('electricity_usage.html', electricity_usage=electricity_usage)
+    electricity_data = Electricity.query.filter_by(building_id=building_id).all()
+    if not electricity_data:
+        return jsonify(error="No data found for building")
+
+    data = []
+    for row in electricity_data:
+        data.append({
+            "electricity_usage": row.electricity_usage,
+            "date": row.date.strftime('%Y-%m-%d')
+        })
+
+    return jsonify(data)
+
+@blueprint.route('/water_usage/<int:building_id>')
+def show_water_usage_for_building(building_id):
+    water_data = Water.query.filter_by(building_id=building_id).all()
+    if not water_data:
+        return jsonify(error="No data found for building")
+
+    data = []
+    for row in water_data:
+        data.append({
+            "water_usage": row.water_usage,
+            "date": row.date.strftime('%Y-%m-%d')
+        })
+
+    return jsonify(data)
 
 @blueprint.route('/electricity_usage/recent/<int:building_id>')
 def show_electricity_usage_for_recent_date(building_id):
