@@ -9619,7 +9619,7 @@ textarea.form-control-lg {
 }
 
 .bg-primary {
-  background-color: #076464 !important;
+  background-color: #f1f8f8 !important;
 }
 
 .bg-secondary {
@@ -9663,7 +9663,7 @@ textarea.form-control-lg {
 }
 
 .bg-gray-100 {
-  background-color: #f8f9fa !important;
+  background-color: #f1f8f8 !important;
 }
 
 .bg-gray-200 {
@@ -17131,7 +17131,7 @@ textarea.form-control-lg {
 }
 
 .badge.bg-primary {
-  background: #076464;
+  background: #f1f8f8;
 }
 
 .badge.bg-secondary {
