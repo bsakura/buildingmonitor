@@ -1,5 +1,9 @@
 {% extends 'layouts/base.html' %}
-
+<head>
+  <title>My HTML Page</title>
+  <!-- Include the OpenAI package -->
+  <script src="https://cdn.jsdelivr.net/npm/openai/src/index.js"></script>
+</head>
 {% block title %} PP {% endblock title %}
 
 <!-- Specific CSS goes HERE -->
@@ -25,11 +29,12 @@
   left: 50%;
   border-radius: 50%;
   background-color: transparent;
-  border: 15px solid #FFCF95;
+  border: 15px solid;
   border-top-color: transparent;
   transform: translate(-50%, -50%) rotate(-135deg);
   box-sizing: border-box;
 }
+
 
 .progresscir-text {
   position: absolute;
@@ -86,7 +91,7 @@
                 </div>
                 <div class="card-body p-3">
                   <div class="chart">
-                    <canvas id="chart-line-carbon-footprint" class="chart-canvas" height="220"></canvas>
+                    <canvas id="chart-line-carbon-footprint" class="chart-canvas" height="325"></canvas>
                   </div>
                 </div>
               </div>
@@ -150,69 +155,73 @@
               <div class="circle-percentage">
                 <div class="progresscir"></div>
                 <div class="progresscir-text text-center">
-                  <span class="percentage">75%</span>
-                  <p class="text-secondary">Platinum</p>
+                  <span class="percentage" id="total_leed">75%</span>
+                  <p class="text-secondary" id="scoring">Platinum</p>
                 </div>
               </div>
-              <div class="row">
-                <div class="col">
-                  <div class="d-flex justify-content-center">
-                    <div class="d-grid text-center">
-                      <span class="text-lg font-weight-bolder">2</span>
-                      <span class="text-sm opacity-8">Location</span>
-                    </div>
-                    <div class="d-grid text-center mx-4">
-                      <span class="text-lg font-weight-bolder">10</span>
-                      <span class="text-sm opacity-8">Sustainability</span>
-                    </div>
-                    <div class="d-grid text-center">
-                      <span class="text-lg font-weight-bolder">8</span>
-                      <span class="text-sm opacity-8">Water</span>
+
+              
+                <div class="row">
+                  <div class="col">
+                    <div class="d-flex justify-content-center">
+                      <div class="d-grid text-center">
+                        <span class="text-lg font-weight-bolder" id="location_transportation">2</span>
+                        <span class="text-sm opacity-8">Location</span>
+                      </div>
+                      <div class="d-grid text-center mx-4">
+                        <span class="text-lg font-weight-bolder" id="sustainable_sites">10</span>
+                        <span class="text-sm opacity-8">Sustainability</span>
+                      </div>
+                      <div class="d-grid text-center">
+                        <span class="text-lg font-weight-bolder" id="water_efficiency">8</span>
+                        <span class="text-sm opacity-8">Water</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="row">
-                <div class="col">
-                  <div class="d-flex justify-content-center">
-                    <div class="d-grid text-center">
-                      <span class="text-lg font-weight-bolder">2</span>
-                      <span class="text-sm opacity-8">Energy</span>
-                    </div>
-                    <div class="d-grid text-center mx-4">
-                      <span class="text-lg font-weight-bolder">10</span>
-                      <span class="text-sm opacity-8">Material</span>
-                    </div>
-                    <div class="d-grid text-center">
-                      <span class="text-lg font-weight-bolder">8</span>
-                      <span class="text-sm opacity-8">Indoor</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col">
-                  <div class="d-flex justify-content-center">
-                    <div class="d-grid text-center">
-                      <span class="text-lg font-weight-bolder">2</span>
-                      <span class="text-sm opacity-8">Innovation</span>
+                <div class="row">
+                  <div class="col">
+                    <div class="d-flex justify-content-center">
+                      <div class="d-grid text-center">
+                        <span class="text-lg font-weight-bolder" id="energy_atmosphere">2</span>
+                        <span class="text-sm opacity-8">Energy</span>
+                      </div>
+                      <div class="d-grid text-center mx-4">
+                        <span class="text-lg font-weight-bolder" id="materials_resources">10</span>
+                        <span class="text-sm opacity-8">Material</span>
+                      </div>
+                      <div class="d-grid text-center">
+                        <span class="text-lg font-weight-bolder" id="indoor_environmental_quality">8</span>
+                        <span class="text-sm opacity-8">Indoor</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+                
+                <div class="row">
+                  <div class="col">
+                    <div class="d-flex justify-content-center">
+                      <div class="d-grid text-center">
+                        <span class="text-lg font-weight-bolder" id="innovation">2</span>
+                        <span class="text-sm opacity-8">Innovation</span>
+                      </div>
+                     </div>
+                  </div>
+                </div>
+              
             </div>
           </div>
           
           
           
           
-          <div class="card mt-4">
+          <div class="card mt-4 card-height">
             <div class="card-header text-center pb-0">
               <h6>Initiative</h6>
             </div>
 
               <div class="card-body text-center pb-2">
-                <span class="text-sm text-center opacity-8">Hello, initative is here in the housee</span>
+                <span class="text-sm text-center opacity-8" id="initiativesContainer">Please wait for the initiative to load 🐰</span>
 
               </div>
           </div>
@@ -243,21 +252,120 @@
   
   <script src="{{ config.ASSETS_ROOT }}/js/plugins/chartjs.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/json2/20160511/json2.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/openai/src/index.js"></script>
 
   <script>
   const params = new URLSearchParams(window.location.search);
   const buildingValue = params.get('building');
   const url = window.location.href;
-  const buildingValuez = url.substring(url.lastIndexOf('=') + 1);
+  const buildingValues = {
+  'CRCS': 1,
+  'CAS': 2,
+  'Energi': 3,
+  'Kimia': 4,
+  'PP': 5,
+  'PAU': 6,
+  'CADL': 7,
+  'TI': 8,
+  'Mesin': 9,
+  'LabtekX': 10,
+  'LabtekXI': 11,
+  'TPB': 12,
+  'CampusCenter': 13,
+  'AulaBarat': 14,
+  'AulaTimur': 15,
+  'CIBE': 16,
+  'Konversi': 17,
+  'Fisi': 18,
+  'LabtekIXBC': 19,
+  'STT': 20,
+  'TL': 21,
+  'LabtekV': 22,
+  'LabtekVI': 23,
+  'LabtekVII': 24,
+  'LabtekVIII': 25,
+  'Sabuga': 26
+};
+
+const buildingValueNumber = buildingValues[buildingValue];
 
   // Set the href attribute of the link
   const viewDataBtn = document.getElementById('view-data-btn');
-  viewDataBtn.href = `building-data-electricity.html?building=${buildingValuez}`;
+  viewDataBtn.href = `building-data-electricity.html?building=${buildingValue}`;
   const viewDataBtnWtr = document.getElementById('view-data-water-btn');
-  viewDataBtnWtr.href = `building-data-water.html?building=${buildingValuez}`;
+  viewDataBtnWtr.href = `building-data-water.html?building=${buildingValue}`;
 
   const yearValue = "2022";
   var ctx1 = document.getElementById("chart-line-carbon-footprint").getContext("2d");
+
+ // Function to update the HTML with Leed data
+ async function updateLeedData(data) {
+  const energyAtmosphere = document.getElementById('energy_atmosphere');
+  const materialsResources = document.getElementById('materials_resources');
+  const indoorEnvironmentalQuality = document.getElementById('indoor_environmental_quality');
+  const locationTransportation = document.getElementById('location_transportation');
+  const sustainableSites = document.getElementById('sustainable_sites');
+  const waterEfficiency = document.getElementById('water_efficiency');
+  const innovation = document.getElementById('innovation');
+  const totalLeed = document.getElementById('total_leed');
+  const scoring = document.getElementById('scoring');
+  const progressCircle = document.querySelector('.progresscir');
+
+  energyAtmosphere.textContent = data.energy_atmosphere;
+  materialsResources.textContent = data.material_resources;
+  indoorEnvironmentalQuality.textContent = data.indoor_environmental_quality;
+  locationTransportation.textContent = data.location_transportation;
+  sustainableSites.textContent = data.sustainable_sites;
+  waterEfficiency.textContent = data.water_efficiency;
+  innovation.textContent = data.innovation;
+  totalLeed.textContent = data.total_leed;
+
+  if (data.total_leed > 80) {
+    scoring.textContent = 'Platinum';
+    progressCircle.style.borderColor = '#BCDA9E';
+  } else if (data.total_leed > 60) {
+    scoring.textContent = 'Gold';
+    progressCircle.style.borderColor = '#F4BB63';
+  } else if (data.total_leed > 40) {
+    scoring.textContent = 'Silver';
+    progressCircle.style.borderColor = '#CAE5FC';
+  } else {
+    scoring.textContent = 'Certified';
+    progressCircle.style.borderColor = '#EC8F8F';
+  }
+
+ 
+}
+
+// Function to generate initiatives based on LEED scores using OpenAI
+
+fetch(`/inits/${buildingValueNumber}`)
+    .then(response => response.json())
+    .then(initiatives => {
+      // Display the initiatives
+      const initiativesContainer = document.getElementById('initiativesContainer');
+      initiativesContainer.innerHTML = '';
+      console.log("initiative", initiatives)
+
+      initiatives.forEach(initiative => {
+        const initiativeItem = document.createElement('li');
+        initiativeItem.textContent = initiative;
+        initiativesContainer.appendChild(initiativeItem);
+      });
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+
+
+
+
+// Fetch the Leed data for building with ID 1
+fetch(`/leed/${buildingValueNumber}`)
+  .then(response => response.json())
+  .then(data => updateLeedData(data))
+  .catch(error => console.error('Error:', error));
+
 
   fetch(`/building-data/${buildingValue}`)
     .then((response) => response.json())

@@ -17,4 +17,5 @@ statsmodels
 matplotlib
 scikit-learn
 openpyxl
+openai
 #flask_mysqldb

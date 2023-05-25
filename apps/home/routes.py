@@ -18,8 +18,9 @@ from datetime import datetime
 from .electricitydata import *
 from .waterdata import *
 from .carbondata import *
+from .leedinitiative import *
 import logging
-
+import asyncio
 
 """
 add predicted_kwh from electricity.py to the render_template so it can be used in building-data.html
@@ -86,40 +87,41 @@ def pie_data():
 def index():
     return render_template('home/index.html', segment='index')
 
-
-# Route to get all Leed entries
-@blueprint.route('/leed', methods=['GET'])
-def get_leed():
-    leed = Leed.query.all()
-    results = []
-    for entry in leed:
-        result = {
-            'building_id': entry.building_id,
-            'location_transportation': entry.location_transportation,
-            'sustainable_sites': entry.sustainable_sites,
-            'water_efficiency': entry.water_efficiency,
-            'energy_atmosphere': entry.energy_atmosphere,
-            'material_resources': entry.material_resources,
-            'indoor_environmental_quality': entry.indoor_environmental_quality,
-            'innovation': entry.innovation,
-            'total_leed': entry.total_leed
-        }
-        results.append(result)
-    return jsonify(results)
-
-# Route to get a specific Leed entry by building ID
-@blueprint.route('/leed/<int:building_id>', methods=['GET'])
-def get_leed_by_id(building_id):
-    entry = Leed.query.filter_by(building_id=building_id).first()
+@blueprint.route('/inits/<int:building_id>', methods=['GET','POST'])
+def generate_initiatives_route(building_id):
+    entry = Leed.query.filter_by(building_id=building_id).order_by(Leed.date.desc()).first()
     if not entry:
         return jsonify({'message': 'Leed entry not found'})
+    
+    
+    building_id= entry.building_id
+    location_transportation= entry.location_transportation
+    sustainable_sites= entry.sustainable_sites
+    water_efficiency= entry.water_efficiency
+    energy_atmosphere= entry.energy_atmosphere
+    material_resources= entry.materials_resources
+    indoor_environmental_quality= entry.indoor_environmental_quality
+    innovation= entry.innovation
+    total_leed= entry.total_leed
+    
+    initiatives = generate_initiatives(energy_atmosphere, indoor_environmental_quality, location_transportation, material_resources, sustainable_sites, water_efficiency, innovation)
+    return jsonify(initiatives)
+
+
+
+@blueprint.route('/leed/<int:building_id>', methods=['GET'])
+def get_leed_by_building(building_id):
+    entry = Leed.query.filter_by(building_id=building_id).order_by(Leed.date.desc()).first()
+    if not entry:
+        return jsonify({'message': 'Leed entry not found'})
+    
     result = {
         'building_id': entry.building_id,
         'location_transportation': entry.location_transportation,
         'sustainable_sites': entry.sustainable_sites,
         'water_efficiency': entry.water_efficiency,
         'energy_atmosphere': entry.energy_atmosphere,
-        'material_resources': entry.material_resources,
+        'material_resources': entry.materials_resources,
         'indoor_environmental_quality': entry.indoor_environmental_quality,
         'innovation': entry.innovation,
         'total_leed': entry.total_leed
