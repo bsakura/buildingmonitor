@@ -220,13 +220,15 @@
     .then((response) => response.json())
     .then((data) => {
       const predictedCF = data.predicted_cf.map((d) => d[buildingValue]);
-      const actualCF = data.actual_cf.map((d) => d[buildingValue]);
-
-      // Create the chart using the retrieved predictedKwh and actualKwh data
+      const actualCF = data.actual_cf.map((d) => d[buildingValue]).slice(0,6);
+      console.log("actualCF", actualCF);
+      //create a legend for prediction and actual
+      
       new Chart(ctcf, {
         type: "line",
         data: {
-          labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+          
+          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
           datasets: [{
             label: "Actual",
             tension: 0.4,
@@ -325,7 +327,7 @@ fetch(`/building-data/${buildingValue}`)
     new Chart(ctel, {
       type: "bar",
       data: {
-        labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
         datasets: [{
           label: "Actual",
           tension: 0.4,
@@ -408,7 +410,7 @@ fetch(`/building-data/${buildingValue}`)
         new Chart(ctx3, {
           type: "bar",
           data: {
-            labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
             datasets: [{
               label: "Actual",
               tension: 0.4,
