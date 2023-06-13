@@ -29,9 +29,8 @@
                   <h6 class="text-capitalize mb-0">Electricity Prediction</h6>
                   <div>
                     <select name="year" id="year" class="form-control" onchange="updateChart()">
-                      <option value="2022">2022</option>
-                      <option value="2021">2021</option>
-                      <option value="2020">2020</option> 
+                      <option value="2022">2023</option>
+                      <option value="2021">2022</option>
                     </select>
                   </div>
                 </div>
@@ -81,7 +80,6 @@
                 <select name= "yearelectricity" id="yearelectricity" class="form-control" onchange="updateChartElectricity()">
                   <option value="2022">2022</option>
                   <option value="2021">2021</option>
-                  <option value="2020">2020</option> 
                 </select>
               </p>
             </div>
@@ -214,7 +212,7 @@
           return new Date(d.Date).getFullYear() == yearValue;
       });
       const predictedEl = filteredDataPredicted.map((d) => d.Predicted);
-      const actualEl = filteredDataActual.map((d) => d.Actual);
+      const actualEl = filteredDataActual.map((d) => d.Actual).slice(0, 6);
       
 
       // Create the chart using the retrieved predictedKwh and actualKwh data
@@ -277,6 +275,9 @@
                     style: 'normal',
                     lineHeight: 2
                   },
+                  callback: function(value, index, values) {
+                    return value + ' kWh'; // Add ' kWh' to the tick label
+                  }
                 }
               },
               x: {
@@ -376,6 +377,9 @@
                     style: 'normal',
                     lineHeight: 2
                   },
+                  callback: function(value, index, values) {
+                    return value + ' kWh'; // Add ' kWh' to the tick label
+                  }
                 }
               },
               x: {
@@ -432,7 +436,10 @@
           });
           console.log("filtered",filteredDataPredicted)
           const predictedCF = filteredDataPredicted.map((d) => d.Predicted);
-          const actualCF = filteredDataActual.map((d) => d.Actual);
+          var actualCF = filteredDataActual.map((d) => d.Actual);
+          if (yearValue == 2022) {
+            actualCF = actualCF.slice(0, 6);
+          }
           console.log("actualCF", actualCF)
 
           console.log("predictedCF", predictedCF)

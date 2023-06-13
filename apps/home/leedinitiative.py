@@ -1,7 +1,7 @@
 import openai
 
 # Initialize OpenAI API
-openai.api_key = "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"
+openai.api_key = "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"
 
 
 def generate_initiatives(energy_atmosphere, indoor_environmental_quality, location_transportation, material_resources, sustainable_sites, water_efficiency, innovation):

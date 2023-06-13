@@ -1,7 +1,5 @@
 # -*- encoding: utf-8 -*-
-"""
-Copyright (c) 2019 - present AppSeed.us
-"""
+
 
 from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
@@ -85,7 +83,7 @@ def pie_data():
 @blueprint.route('/index')
 @login_required
 def index():
-    return render_template('home/index.html', segment='index')
+    return render_template('home/dash.html', segment='dash')
 
 @blueprint.route('/inits/<int:building_id>', methods=['GET','POST'])
 def generate_initiatives_route(building_id):

@@ -29,9 +29,8 @@
                   <h6 class="text-capitalize mb-0">Water Prediction</h6>
                   <div>
                     <select name="year" id="year" class="form-control" onchange="updateChart()">
-                      <option value="2022">2022</option>
-                      <option value="2021">2021</option>
-                      <option value="2020">2020</option> 
+                      <option value="2022">2023</option>
+                      <option value="2021">2022</option>
                     </select>
                   </div>
                 </div>
@@ -81,7 +80,6 @@
                 <select name= "yearwater" id="yearwater" class="form-control" onchange="updateChartwater()">
                   <option value="2022">2022</option>
                   <option value="2021">2021</option>
-                  <option value="2020">2020</option> 
                 </select>
               </p>
             </div>
@@ -214,7 +212,7 @@
           return new Date(d.Date).getFullYear() == yearValue;
       });
       const predictedEl = filteredDataPredicted.map((d) => d.Predicted);
-      const actualEl = filteredDataActual.map((d) => d.Actual);
+      const actualEl = filteredDataActual.map((d) => d.Actual).slice(0,6);
       
 
       // Create the chart using the retrieved predictedLiter and actualLiter data
@@ -261,24 +259,27 @@
             },
             scales: {
               y: {
-                grid: {
-                  drawBorder: false,
-                  display: true,
-                  drawOnChartArea: true,
-                  drawTicks: false,
-                  borderDash: [5, 5]
-                },
-                ticks: {
-                  display: true,
-                  padding: 10,
-                  font: {
-                    size: 11,
-                    family: "Open Sans",
-                    style: 'normal',
-                    lineHeight: 2
-                  },
-                }
+            grid: {
+              drawBorder: false,
+              display: true,
+              drawOnChartArea: true,
+              drawTicks: false,
+              borderDash: [5, 5]
+            },
+            ticks: {
+              display: true,
+              padding: 10,
+              font: {
+                size: 11,
+                family: "Open Sans",
+                style: 'normal',
+                lineHeight: 2
               },
+              callback: function(value, index, values) {
+                return value + ' Liter'; // Add ' Liter' to the tick label
+              }
+            }
+          },
               x: {
                 grid: {
                   drawBorder: false,
@@ -361,24 +362,27 @@
             },
             scales: {
               y: {
-                grid: {
-                  drawBorder: false,
-                  display: true,
-                  drawOnChartArea: true,
-                  drawTicks: false,
-                  borderDash: [5, 5]
-                },
-                ticks: {
-                  display: true,
-                  padding: 10,
-                  font: {
-                    size: 11,
-                    family: "Open Sans",
-                    style: 'normal',
-                    lineHeight: 2
-                  },
-                }
+            grid: {
+              drawBorder: false,
+              display: true,
+              drawOnChartArea: true,
+              drawTicks: false,
+              borderDash: [5, 5]
+            },
+            ticks: {
+              display: true,
+              padding: 10,
+              font: {
+                size: 11,
+                family: "Open Sans",
+                style: 'normal',
+                lineHeight: 2
               },
+              callback: function(value, index, values) {
+                return value + ' Liter'; // Add ' Liter' to the tick label
+              }
+            }
+          },
               x: {
                 grid: {
                   drawBorder: false,
@@ -433,7 +437,10 @@
           });
           console.log("filtered",filteredDataPredicted)
           const predictedCF = filteredDataPredicted.map((d) => d.Predicted);
-          const actualCF = filteredDataActual.map((d) => d.Actual);
+          var actualCF = filteredDataActual.map((d) => d.Actual);
+          if (yearValue == 2022){
+            actualCF = actualCF.slice(0, 6);
+          }
           console.log("actualCF", actualCF)
 
           console.log("predictedCF", predictedCF)

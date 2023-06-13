@@ -83,9 +83,8 @@
                   <h6 class="text-capitalize mb-0">Carbon Footprint</h6>
                   <div>
                     <select name="year" id="year" class="form-control" onchange="updateChart()">
-                      <option value="2022">2022</option>
-                      <option value="2021">2021</option>
-                      <option value="2020">2020</option> 
+                      <option value="2022">2023</option>
+                      <option value="2021">2022</option>
                     </select>
                   </div>
                 </div>
@@ -102,13 +101,7 @@
               <div class="card z-index-2 h-70">
                 <div class="card-header pb-0 pt-3 bg-transparent d-flex align-items-center justify-content-between">
                   <h6 class="text-capitalize">Electricity</h6>
-                  <p class="text-sm mb-0">
-                    <select name= "yearelectricity" id="yearelectricity" class="form-control" onchange="updateChartElectricity()">
-                      <option value="2022">2022</option>
-                      <option value="2021">2021</option>
-                      <option value="2020">2020</option> 
-                    </select>
-                  </p>
+                 
                 </div>
                 <div class="card-body p-3">
                   <div class="chart">
@@ -125,13 +118,7 @@
               <div class="card z-index-2 h-70">
                 <div class="card-header pb-0 pt-3 bg-transparent d-flex align-items-center justify-content-between">
                   <h6 class="text-capitalize">Water</h6>
-                  <p class="text-sm mb-0">
-                    <select name= "yearwater" id="yearwater" class="form-control" onchange="updateChartWater()">
-                      <option value="2022">2022</option>
-                      <option value="2021">2021</option>
-                      <option value="2020">2020</option> 
-                    </select>
-                  </p>
+                  
                 </div>
                 <div class="card-body p-3">
                   <div class="chart">
@@ -386,7 +373,7 @@ fetch(`/leed/${buildingValueNumber}`)
       });
       console.log("filtered",filteredDataPredicted)
       const predictedCF = filteredDataPredicted.map((d) => d.Predicted);
-      const actualCF = filteredDataActual.map((d) => d.Actual);
+      const actualCF = filteredDataActual.map((d) => d.Actual).slice(0,6);
       
 
       // Create the chart using the retrieved predictedKwh and actualKwh data
@@ -448,6 +435,9 @@ fetch(`/leed/${buildingValueNumber}`)
                     style: 'normal',
                     lineHeight: 2
                   },
+                  callback: function(value, index, values) {
+                    return value + ' CO2e'; // Add ' CO2e' to the tick label
+                  }
                 }
               },
               x: {
@@ -476,197 +466,233 @@ fetch(`/leed/${buildingValueNumber}`)
     });
 
 
-  var ctx2 = document.getElementById("chart-electricity").getContext("2d");
-  fetch(`/building-data/${buildingValue}`)
-    .then((response) => response.json())
-    .then((data) => {
-      const dataArray = Object.entries(data);
-      
-      const filteredDataActual = dataArray[1][1].map((d) => {
-          return { Date: d.Date, Actual: d[buildingValue] };
-      }).filter((d) => {
-          return new Date(d.Date).getFullYear() == yearValue;
-      });
-      console.log(filteredDataActual)
+    var ctx2 = document.getElementById("chart-electricity").getContext("2d");
+fetch(`/building-data/${buildingValue}`)
+  .then((response) => response.json())
+  .then((data) => {
+    const dataArray = Object.entries(data);
 
-      const filteredDataPredicted = dataArray[4][1].map((d) => {
-          return { Date: d.Date, Predicted: d[buildingValue] };
-      }).filter((d) => {
-          return new Date(d.Date).getFullYear() == yearValue;
-      });
-      console.log("filtered",filteredDataPredicted)
-      const predictedKwH = filteredDataPredicted.map((d) => d.Predicted);
-      const actualKwH = filteredDataActual.map((d) => d.Actual);
+    const filteredDataActual = dataArray[1][1].map((d) => {
+      return { Date: d.Date, Actual: d[buildingValue] };
+    }).filter((d) => {
+      const month = new Date(d.Date).getMonth();
+      return month >= 0 && month <= 5 && new Date(d.Date).getFullYear() == yearValue;
+    });
 
-      // Create the chart using the retrieved predictedKwh and actualKwh data
-      new Chart(ctx2, {
-        type: "bar",
-        data: {
-          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-          datasets: [{
-            label: "Actual",
-            tension: 0.4,
-            borderWidth: 0,
-            pointRadius: 0,
-            borderColor: "#FFCF95 ",
-            borderWidth: 3,
-            fill: false,
-            data: actualKwH,
-            maxBarThickness: 6,
-          borderRadius: 100
+    const filteredDataPredicted = dataArray[4][1].map((d) => {
+      return { Date: d.Date, Predicted: d[buildingValue] };
+    }).filter((d) => {
+      const month = new Date(d.Date).getMonth();
+      return month >= 6 && month <= 11 && new Date(d.Date).getFullYear() == yearValue;
+    });
 
+    const predictedKwH = filteredDataPredicted.map((d) => d.Predicted);
+    const actualKwH = filteredDataActual.map((d) => d.Actual);
+
+    // Create the chart using the retrieved predictedKwH and actualKwH data
+    new Chart(ctx2, {
+      type: "bar",
+      data: {
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        datasets: [
+      {
+        label: "Actual",
+        tension: 0.4,
+        borderWidth: 0,
+        pointRadius: 0,
+        borderColor: "#FFCF95" ,
+        backgroundColor:"#FFCF95",
+        borderWidth: 3,
+        fill: false,
+        data: [...actualKwH, null, null, null, null, null], // Add null values for the remaining months
+        maxBarThickness: 6,
+        borderRadius: 100
+      },
+      {
+        label: "Predicted",
+        tension: 0.4,
+        borderWidth: 0,
+        pointRadius: 0,
+        borderColor: "#ccc",
+        backgroundColor:"#ccc",
+        borderWidth: 3,
+        fill: false,
+        data: [null, null, null, null, null, null, ...predictedKwH], // Add null values for the initial months
+        maxBarThickness: 6,
+        borderRadius: 100
+      }
+    ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false,
           }
-          ],
         },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: {
-                display: false,
+        interaction: {
+          intersect: false,
+          mode: 'index',
+        },
+        scales: {
+          y: {
+            grid: {
+              drawBorder: false,
+              display: true,
+              drawOnChartArea: true,
+              drawTicks: false,
+              borderDash: [5, 5]
+            },
+            ticks: {
+              display: true,
+              padding: 10,
+              font: {
+                size: 11,
+                family: "Open Sans",
+                style: 'normal',
+                lineHeight: 2
+              },
+              callback: function(value, index, values) {
+                return value + ' kWh'; // Add ' kWh' to the tick label
               }
-            },
-            interaction: {
-              intersect: false,
-              mode: 'index',
-            },
-            scales: {
-              y: {
-                grid: {
-                  drawBorder: false,
-                  display: true,
-                  drawOnChartArea: true,
-                  drawTicks: false,
-                  borderDash: [5, 5]
-                },
-                ticks: {
-                  display: true,
-                  padding: 10,
-                  font: {
-                    size: 11,
-                    family: "Open Sans",
-                    style: 'normal',
-                    lineHeight: 2
-                  },
-                }
-              },
-              x: {
-                grid: {
-                  drawBorder: false,
-                  display: false,
-                  drawOnChartArea: false,
-                  drawTicks: false,
-                  borderDash: [5, 5]
-                },
-                ticks: {
-                  display: true,
-                  color: '#ccc',
-                  padding: 20,
-                  font: {
-                    size: 11,
-                    family: "Open Sans",
-                    style: 'normal',
-                    lineHeight: 2
-                  },
-                }
-              },
-            },
+            }
           },
-        });
+          x: {
+            grid: {
+              drawBorder: false,
+              display: false,
+              drawOnChartArea: false,
+              drawTicks: false,
+              borderDash: [5, 5]
+            },
+            ticks: {
+              display: true,
+              color: '#ccc',
+              padding: 20,
+              font: {
+                size: 11,
+                family: "Open Sans",
+                style: 'normal',
+                lineHeight: 2
+              },
+            }
+          },
+        },
+      },
     });
-
+  });
 
   
     const ctx3 = document.getElementById("chart-water").getContext("2d");
 
     fetch(`/building-data/${buildingValue}`)
-      .then((response) => response.json())
-      .then((data) => {
-      const dataArray = Object.entries(data);
-        
-        const filteredDataActual = dataArray[2][1].map((d) => {
-            return { Date: d.Date, Actual: d[buildingValue] };
-        }).filter((d) => {
-            return new Date(d.Date).getFullYear() == yearValue;
-        });
-        console.log(filteredDataActual)
+  .then((response) => response.json())
+  .then((data) => {
+    const dataArray = Object.entries(data);
 
-        const filteredDataPredicted = dataArray[5][1].map((d) => {
-            return { Date: d.Date, Predicted: d[buildingValue] };
-        }).filter((d) => {
-            return new Date(d.Date).getFullYear() == yearValue;
-        });
-        console.log("filtered",filteredDataPredicted)
-        const predictedLiter = filteredDataPredicted.map((d) => d.Predicted);
-        const actualLiter = filteredDataActual.map((d) => d.Actual);
+    const filteredDataActual = dataArray[2][1].map((d) => {
+      return { Date: d.Date, Actual: d[buildingValue] };
+    }).filter((d) => {
+      const month = new Date(d.Date).getMonth();
+      return month >= 0 && month <= 5 && new Date(d.Date).getFullYear() == yearValue;
+    });
 
-        // Create the chart using the retrieved predictedKwh and actualKwh data
-        new Chart(ctx3, {
-          type: "bar",
-          data: {
-            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-            datasets: [{
-              label: "Actual",
-              tension: 0.4,
-              borderWidth: 0,
-              pointRadius: 0,
-              borderColor: "#CAE5FC",
-              backgroundColor: "#CAE5FC",
-              borderWidth: 3,
-              fill: false,
-              data: actualLiter,
-              maxBarThickness: 6,
-              borderRadius: 100
-            }
-            ],
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: {
-                display: false,
-              }
+    const filteredDataPredicted = dataArray[5][1].map((d) => {
+      return { Date: d.Date, Predicted: d[buildingValue] };
+    }).filter((d) => {
+      const month = new Date(d.Date).getMonth();
+      return month >= 6 && month <= 11 && new Date(d.Date).getFullYear() == yearValue;
+    });
+
+    const predictedLiter = filteredDataPredicted.map((d) => d.Predicted);
+    const actualLiter = filteredDataActual.map((d) => d.Actual);
+
+    // Create the chart using the retrieved predictedLiter and actualLiter data
+    new Chart(ctx3, {
+      type: "bar",
+      data: {
+    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    datasets: [
+      {
+        label: "Actual",
+        tension: 0.4,
+        borderWidth: 0,
+        pointRadius: 0,
+        borderColor: "#CAE5FC",
+        backgroundColor: "#CAE5FC",
+        borderWidth: 3,
+        fill: false,
+        data: [...actualLiter, null, null, null, null, null], // Add null values for the remaining months
+        maxBarThickness: 6,
+        borderRadius: 100
+      },
+      {
+        label: "Predicted",
+        tension: 0.4,
+        borderWidth: 0,
+        pointRadius: 0,
+        borderColor: "#ccc",
+        backgroundColor:"#ccc",
+        borderWidth: 3,
+        fill: false,
+        data: [null, null, null, null, null, null, ...predictedLiter], // Add null values for the initial months
+        maxBarThickness: 6,
+        borderRadius: 100
+      }
+    ],
+  },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false,
+          }
+        },
+        interaction: {
+          intersect: false,
+          mode: 'index',
+        },
+        scales: {
+          y: {
+            grid: {
+              drawBorder: false,
+              display: true,
+              drawOnChartArea: true,
+              drawTicks: false,
+              borderDash: [5, 5]
             },
-            interaction: {
-              intersect: false,
-              mode: 'index',
-            },
-            scales: {
-              y: {
-                grid: {
-                  drawBorder: false,
-                  display: true,
-                  drawOnChartArea: true,
-                  drawTicks: false,
-                  borderDash: [5, 5]
-                },
-                ticks: {
-                  display: true,
-                  padding: 10,
-                  font: {
-                    size: 11,
-                    family: "Open Sans",
-                    style: 'normal',
-                    lineHeight: 2
-                  },
-                }
+            ticks: {
+              display: true,
+              padding: 10,
+              font: {
+                size: 11,
+                family: "Open Sans",
+                style: 'normal',
+                lineHeight: 2
               },
-              x: {
-                grid: {
-                  drawBorder: false,
-                  display: false,
-                  drawOnChartArea: false,
-                  drawTicks: false,
-                  borderDash: [5, 5]
-                },
-                ticks: {
-                  display: true,
-                  color: '#ccc',
-                  padding: 20,
-                  font: {
-                    size: 11,
-                    family: "Open Sans",
+              callback: function(value, index, values) {
+                return value + ' Liter'; // Add ' Liter' to the tick label
+              }
+            }
+          },
+          x: {
+            grid: {
+              drawBorder: false,
+              display: false,
+              drawOnChartArea: false,
+              drawTicks: false,
+              borderDash: [5, 5]
+            },
+            ticks: {
+              display: true,
+              color: '#ccc',
+              padding: 20,
+              font: {
+                size: 11,
+                family: "Open Sans",
+               
                     style: 'normal',
                     lineHeight: 2
                   },
@@ -690,8 +716,9 @@ fetch(`/leed/${buildingValueNumber}`)
           // convert the dictionary to an array of key-value pairs
           const dataArray = Object.entries(data);
           console.log(dataArray)
-
-          const filteredDataActual = dataArray[0][1].map((d) => {
+          
+          
+          var filteredDataActual = dataArray[0][1].map((d) => {
               return { Date: d.Date, Actual: d[buildingValue] };
           }).filter((d) => {
               return new Date(d.Date).getFullYear() == yearValue;
@@ -703,6 +730,9 @@ fetch(`/leed/${buildingValueNumber}`)
           }).filter((d) => {
               return new Date(d.Date).getFullYear() == yearValue;
           });
+          if (yearValue==2022){
+            filteredDataActual = filteredDataActual.slice(0, 6)
+          }
           console.log("filtered",filteredDataPredicted)
           const predictedCF = filteredDataPredicted.map((d) => d.Predicted);
           const actualCF = filteredDataActual.map((d) => d.Actual);
